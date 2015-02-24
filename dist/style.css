@@ -1,0 +1,47 @@
+.clearfix {
+  clear: both;
+  display: block;
+}
+.focused {
+  background-color: #ff7;
+}
+.cell {
+  float: left;
+  position: relative;
+}
+.cell-content {
+  font-family: Futura, sans-serif;
+  text-transform: uppercase;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  border: 1px solid black;
+}
+.cell-list {
+  border: 1px solid black;
+}
+.unplayable {
+  background-color: black;
+}
+.flex-centered {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+  display: -ms-flexbox;
+  -ms-flex-direction: column;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+}
