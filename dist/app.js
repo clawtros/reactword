@@ -241,11 +241,24 @@
     },
     
     componentDidMount: function() {
+      window.addEventListener('dblclick', this.toggleDirection);
+
       window.addEventListener('keydown', this.handleKeyDown);
     },
 
     componentWillUnmount: function() {
       window.removeEventListener('keydown', this.handleKeyDown);
+      window.removeEventListener('dblclick', this.handleDoubleClick);
+    },
+
+    handleDoubleClick: function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleDirection();
+    },
+
+    toggleDirection: function() {
+      this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
     },
     
     render: function() {
