@@ -1,6 +1,7 @@
 /*global require */
 
 var gulp = require('gulp'),
+    traceur = require('gulp-traceur'),
     del = require('del'),
     run = require('gulp-run'),
     less = require('gulp-less'),

@@ -1,9 +1,55 @@
 (function(React, module, undefined) {
+
+
   var Cell = require('./Cell.jsx'),
+      cw = require('../models/Crossword.js'),
+      UNPLAYABLE = "#",
       DIRECTIONS = {
         ACROSS: [1, 0],
         DOWN: [0, 1]
       };
+
+  var Model = {
+    size: 0,
+    values: [],
+    
+    currentWord: function(position, direction) {
+      var cells = [], result = [];
+      if (direction == DIRECTIONS.ACROSS) {
+        var start = Math.floor(position / this.size) * this.size,
+            end = start + this.size;
+        cells = range(start, end);
+      } else {
+        var start = position % this.size,
+            end = this.values.length;
+        cells = range(start, end, this.size);
+      }
+      var cellIndex = cells.indexOf(position),
+          left = [],
+          right = [],
+          i;
+      for (i = cellIndex; i < cells.length; i++) {
+        if (this.values[cells[i]] !== UNPLAYABLE) {
+          right.push(cells[i]);
+        } else {
+          break;
+        }
+      }
+      for (i = cellIndex; i >= 0; i--) {
+        if (this.props.values[cells[i]] !== UNPLAYABLE) {
+          left.push(cells[i]);
+        } else {
+          break;
+        }
+      }
+
+      return left.concat(right);
+    },
+
+    inWord: function(cell, cells) {
+      return cells.indexOf(cell) > -1;
+    }
+  };
   
   function range(start, stop, step){
     if (typeof stop=='undefined'){
@@ -28,6 +74,7 @@
     keysDown: 0,
     
     getInitialState: function() {
+      console.log("AAAH");
       return {
         activeCell: undefined,
         direction: DIRECTIONS.ACROSS,
@@ -37,7 +84,7 @@
     },
     
     makeActive: function(id) {
-      if (this.props.values[id] !== "#") {
+      if (this.props.values[id] !== UNPLAYABLE) {
         this.setState({ activeCell: id });
       }
     },
@@ -82,7 +129,7 @@
     },
     
     handleKeyDown: function(e) {
-
+      console.log(e.which);
       if (this.state.activeCell) {
           
         var values = this.state.cellValues,
@@ -168,8 +215,7 @@
       var initial = this.goOne(this.state.activeCell, delta),
           next = initial;
       
-      while (this.props.values[next] === "#") {
-        
+      while (this.props.values[next] === UNPLAYABLE) {        
         next = this.goOne(next, delta);
       }
       
@@ -181,7 +227,6 @@
     
     componentDidMount: function() {
       window.addEventListener('dblclick', this.toggleDirection);
-
       window.addEventListener('keydown', this.handleKeyDown);
     },
 
@@ -220,7 +265,7 @@
                     selected={id == this.state.activeCell}
                     key={id}
                     value={this.state.cellValues[id]}
-                    playable={cell !== "#"}
+                    playable={cell !== UNPLAYABLE}
                     correctValue={cell}
                     size={100 / size} />);
            }, this)}

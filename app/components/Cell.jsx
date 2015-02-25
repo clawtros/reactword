@@ -17,14 +17,13 @@
     render: function() {
       var style = {
         width: this.props.size + "%",
-        fontSize: (this.props.size - 3) + "vw",
+        fontSize: "calc(100%)",
         paddingTop: this.props.size + "%"
       },
           numStyle = {
-            fontSize: (this.props.size * 0.25) + 'vw'
+            fontSize: this.props.size + 'pt'
           },
-          cx = React.addons.classSet,
-          classes = cx({
+          classes = React.addons.classSet({
             'cell': true,
             'input-cell': this.props.selected,
             'flex-centered': true,

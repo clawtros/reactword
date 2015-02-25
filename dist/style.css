@@ -48,7 +48,7 @@
 .input-cell {
   background-color: gold;
   transform: scale(1.2);
-  transition: transform 0.5s;
+  transition: transform 0.15s ease-out;
   z-index: 100000;
 }
 .cell-list {
@@ -75,4 +75,23 @@
   -ms-flex-direction: column;
   -ms-flex-align: center;
   -ms-flex-pack: center;
+}
+.clue-list-container {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.clue-list {
+  padding: 0;
+  margin: 0;
+}
+.clue-number,
+.clue-phrase {
+  display: inline-block;
+}
+.clue-number {
+  margin-right: 5px;
+  font-weight: bold;
+}
+.clue-container {
+  list-style-type: none;
 }
