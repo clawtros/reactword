@@ -37,7 +37,9 @@
     },
     
     makeActive: function(id) {
-      this.setState({ activeCell: id });
+      if (this.props.values[id] !== "#") {
+        this.setState({ activeCell: id });
+      }
     },
     
     currentWord: function() {
@@ -163,10 +165,11 @@
     },
 
     go: function(delta) {
-      var next = this.goOne(this.state.activeCell, delta);
-      console.log(this.props.values[next]);
+      var initial = this.goOne(this.state.activeCell, delta),
+          next = initial;
+      
       while (this.props.values[next] === "#") {
-        console.log('skipping');
+        
         next = this.goOne(next, delta);
       }
       
