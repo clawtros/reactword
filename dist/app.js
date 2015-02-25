@@ -21,21 +21,14 @@
         value: this.props.value
       };
     },
-
-    handleMouseEnter: function() {
-      this.setState({ focused: true });
-    },
-    
-    handleMouseExit: function() {
-      this.setState({ focused: false });
-    },
     
     render: function() {
-      var style = {
-        width: this.props.size + "%",
-        fontSize: "calc(100%)",
-        paddingTop: this.props.size + "%"
-      },
+      var fact = true,
+          style = {
+            width: this.props.size + "%",
+            fontSize: this.props.size * 0.4 + 'vw',
+            paddingTop: this.props.size + "%"
+          },
           numStyle = {
             fontSize: this.props.size + 'pt'
           },
@@ -48,8 +41,7 @@
           });
       
       return (
-        React.createElement("div", {style: style, className: classes }, 
-          
+        React.createElement("div", {style: style, className: classes}, 
           React.createElement("div", {style: numStyle, className: "cell-number"}, this.props.number), 
           React.createElement("div", {onClick: this.props.onClick, 
                className: "cell-content flex-centered"}, 
@@ -358,11 +350,13 @@
           )
         )
       }, this);
-      return React.createElement("div", {className: "clue-list-container"}, 
-            React.createElement("h2", null, this.props.direction), 
-            React.createElement("ul", {className: "clue-list"}, 
-              templated
-            )
+      return React.createElement("div", null, 
+       React.createElement("h2", null, this.props.direction), 
+       React.createElement("div", {className: "clue-list-container"}, 
+         React.createElement("ul", {className: "clue-list"}, 
+           templated
+         )
+       )
       )
     }
   });

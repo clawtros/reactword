@@ -14,11 +14,13 @@
           </li>
         )
       }, this);
-      return <div className="clue-list-container">
-            <h2>{this.props.direction}</h2>
-            <ul className="clue-list">
-              {templated}
-            </ul>
+      return <div>
+       <h2>{this.props.direction}</h2>
+       <div className="clue-list-container">
+         <ul className="clue-list">
+           {templated}
+         </ul>
+       </div>
       </div>
     }
   });

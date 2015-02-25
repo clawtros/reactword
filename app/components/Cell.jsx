@@ -5,21 +5,14 @@
         value: this.props.value
       };
     },
-
-    handleMouseEnter: function() {
-      this.setState({ focused: true });
-    },
-    
-    handleMouseExit: function() {
-      this.setState({ focused: false });
-    },
     
     render: function() {
-      var style = {
-        width: this.props.size + "%",
-        fontSize: "calc(100%)",
-        paddingTop: this.props.size + "%"
-      },
+      var fact = true,
+          style = {
+            width: this.props.size + "%",
+            fontSize: this.props.size * 0.4 + 'vw',
+            paddingTop: this.props.size + "%"
+          },
           numStyle = {
             fontSize: this.props.size + 'pt'
           },
@@ -32,8 +25,7 @@
           });
       
       return (
-        <div style={style} className={ classes }>
-          
+        <div style={style} className={classes}>          
           <div style={numStyle} className="cell-number">{this.props.number}</div>
           <div onClick={this.props.onClick}
                className="cell-content flex-centered">
