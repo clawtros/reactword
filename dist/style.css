@@ -3,14 +3,26 @@
   display: block;
 }
 .focused {
-  background-color: #ff7;
+  background-color: #ff9;
 }
 .cell {
   float: left;
   position: relative;
+  transition: background 0.25s;
+}
+.cell-number {
+  font-family: Helvetica Neue, Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-weight: 200;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  color: #555;
+  font-size: 6pt;
 }
 .cell-content {
-  font-family: Futura, sans-serif;
+  font-family: Helvetica Neue, Helvetica, sans-serif;
+  cursor: pointer;
   text-transform: uppercase;
   position: absolute;
   top: 0;
@@ -20,11 +32,14 @@
   text-align: center;
   border: 1px solid black;
 }
+.input-cell {
+  background-color: gold;
+}
 .cell-list {
   border: 1px solid black;
 }
 .unplayable {
-  background-color: black;
+  background-color: #444;
 }
 .flex-centered {
   display: -webkit-box;

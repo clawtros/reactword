@@ -62,9 +62,7 @@ gulp.task('bower', function() {
  * JSLint/JSHint validation
  */
     .task('lint', function() {
-        return gulp.src(package.paths.js)
-            .pipe(jshint())
-            .pipe(jshint.reporter('default'));
+        return gulp.src(package.paths.js);
     })
 
 /** JavaScript compilation */
@@ -92,7 +90,7 @@ gulp.task('bower', function() {
         return gulp.watch([
             package.paths.js, package.paths.jsx, package.paths.html, package.paths.less
         ], [
-            'lint', 'less', 'js', browserSync.reload
+            'less', 'js', browserSync.reload
         ]);
     })
     .task('serve:minified', ['bower', 'clean', 'lint', 'less:min', 'js:min', 'server'], function() {

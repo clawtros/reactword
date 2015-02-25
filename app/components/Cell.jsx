@@ -2,7 +2,6 @@
   module.exports = React.createClass({
     getInitialState: function() {
       return {
-        focused: false,
         value: this.props.value
       };
     },
@@ -14,10 +13,6 @@
     handleMouseExit: function() {
       this.setState({ focused: false });
     },
-
-    makeActive: function() {
-      
-    },
     
     render: function() {
       var style = {
@@ -25,22 +20,25 @@
         fontSize: (this.props.size - 3) + "vw",
         paddingTop: this.props.size + "%"
       },
+          numStyle = {
+            fontSize: (this.props.size * 0.25) + 'vw'
+          },
           cx = React.addons.classSet,
-          isUnplayable = this.state.value === "#",
           classes = cx({
             'cell': true,
+            'input-cell': this.props.selected,
             'flex-centered': true,
-            'focused': this.state.focused === true,
-            'unplayable': isUnplayable
+            'focused': this.props.focused === true,
+            'unplayable': !this.props.playable
           });
       
       return (
-        <div onMouseEnter={this.handleMouseEnter}
-             onMouseLeave={this.handleMouseExit}
-             onClick={this.makeActive}
-             style={style} className={ classes }>
-          <div  className="cell-content flex-centered">
-            {isUnplayable ? "" : this.state.value}
+        <div style={style} className={ classes }>
+          
+          <div style={numStyle} className="cell-number">{this.props.number}</div>
+          <div onClick={this.props.onClick}
+               className="cell-cotent flex-centered">
+            {this.props.playable ? this.props.value : ""}
           </div>
         </div>
       );

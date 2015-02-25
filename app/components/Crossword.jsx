@@ -3,7 +3,7 @@
     module.exports = React.createClass({
         render: function() {
             return (
-                <Cells values={this.props.cells} size={this.props.size}/>
+                <Cells numbered={this.props.numbered} values={this.props.cells} size={this.props.size}/>
             );
         }
     });
