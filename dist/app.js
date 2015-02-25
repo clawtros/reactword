@@ -52,7 +52,7 @@
           
           React.createElement("div", {style: numStyle, className: "cell-number"}, this.props.number), 
           React.createElement("div", {onClick: this.props.onClick, 
-               className: "cell-cotent flex-centered"}, 
+               className: "cell-content flex-centered"}, 
             this.props.playable ? this.props.value : ""
           )
         )
