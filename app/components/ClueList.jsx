@@ -3,10 +3,16 @@
     handleClick: function(clueId) {
       this.props.handleClueClick(clueId, this.props.directionEnum);
     },
+
+    componentDidUpdate: function() {
+      var node = this.getDOMNode(),
+          container = $(node).find('.clue-list-container'),
+          activeClue = container.find('.active-clue'),
+          newTop = activeClue.offset().top - container.offset().top;
+      container.animate({ scrollTop : "+=" + newTop}, 50);
+    },
     
     render: function () {
-      console.log(this.props.activeClue);
-      
       var activeClue = this.props.activeClue,
           templated = Object.keys(this.props.clues).map(function(clueId) {
             var clue = this.props.clues[clueId],

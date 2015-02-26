@@ -106,7 +106,6 @@
 
         if (e.which >= 37 && e.which <= 40) {
           if (e.shiftKey) {
-            console.log(e.which);
             switch (e.which) {
               case 37:
                 this.go(-1, DIRECTIONS.ACROSS);
@@ -248,10 +247,16 @@
     handleClick: function(clueId) {
       this.props.handleClueClick(clueId, this.props.directionEnum);
     },
+
+    componentDidUpdate: function() {
+      var node = this.getDOMNode(),
+          container = $(node).find('.clue-list-container'),
+          activeClue = container.find('.active-clue'),
+          newTop = activeClue.offset().top - container.offset().top;
+      container.animate({ scrollTop : "+=" + newTop}, 50);
+    },
     
     render: function () {
-      console.log(this.props.activeClue);
-      
       var activeClue = this.props.activeClue,
           templated = Object.keys(this.props.clues).map(function(clueId) {
             var clue = this.props.clues[clueId],
@@ -299,7 +304,7 @@
     },
 
     toggleDirection: function() {
-      this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+      this.state.direction = this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS;
       // FIXME
       this.handleMakeActive(this.state.activeCell);
     },
@@ -317,10 +322,10 @@
     },
     
     handleClueClick: function(clueId, direction) {
-      this.setState({
-        direction: direction,
-        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1 // FIXME:
-      });
+      this.state.direction = direction;
+      // FIXME
+      this.handleMakeActive(this.props.model.lookupTable.numberToCell[clueId] - 1);
+      
     },
     
     render: function() {

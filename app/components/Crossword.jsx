@@ -15,7 +15,7 @@
     },
 
     toggleDirection: function() {
-      this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+      this.state.direction = this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS;
       // FIXME
       this.handleMakeActive(this.state.activeCell);
     },
@@ -33,10 +33,10 @@
     },
     
     handleClueClick: function(clueId, direction) {
-      this.setState({
-        direction: direction,
-        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1 // FIXME:
-      });
+      this.state.direction = direction;
+      // FIXME
+      this.handleMakeActive(this.props.model.lookupTable.numberToCell[clueId] - 1);
+      
     },
     
     render: function() {

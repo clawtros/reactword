@@ -51,7 +51,6 @@
 
         if (e.which >= 37 && e.which <= 40) {
           if (e.shiftKey) {
-            console.log(e.which);
             switch (e.which) {
               case 37:
                 this.go(-1, DIRECTIONS.ACROSS);
