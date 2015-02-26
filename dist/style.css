@@ -99,3 +99,9 @@
 .active-clue {
   background-color: gold;
 }
+.incorrect {
+  background-color: red;
+}
+div.container {
+  width: 100%;
+}

@@ -19,7 +19,7 @@
       // FIXME
       this.handleMakeActive(this.state.activeCell);
     },
-        
+
     handleMakeActive: function(cellId) {
       this.setState({
         activeCell: cellId,
@@ -44,6 +44,7 @@
         <div className="row">
           <div className="col-xs-8">
             <h1>{this.props.title}</h1>
+            
             <Cells numbered={this.props.numbered}
                    highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                    makeActive={this.handleMakeActive}
@@ -54,6 +55,7 @@
                    size={this.props.size}/>
           </div>
           <div className="col-xs-4">
+
             <ClueList direction="Across"
                       directionEnum={DIRECTIONS.ACROSS}
                       activeClue={this.state.activeAcrossClue}

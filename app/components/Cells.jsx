@@ -21,7 +21,7 @@
     },
     
     handleKeyDown: function(e) {
-      if (this.props.activeCell) {
+      if (this.props.activeCell !== undefined) {
           
         var values = this.state.cellValues,
             direction = this.props.direction;
@@ -164,9 +164,8 @@
         numbers[k] = count++;
       }
       return (
-        <div onKeyUp={this.handleKeyUp} className="cell-list">
-          {this.props.values.split("").map(function(cell, id) {    
-
+        <div className="cell-list">
+        {this.props.values.split("").map(function(cell, id) {
             return (
               <Cell onClick={this.makeActive.bind(this, id)}
                     number={numbers[id + 1]}

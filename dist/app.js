@@ -2,30 +2,45 @@
 /*global React, _, require */
 
 (function(React, _) {
-    var Crossword = require('./components/Crossword.jsx'),
-        CrosswordModel = require('./models/CrosswordModel.js'),
-        data = require('./data.js');
+  var Crossword = require('./components/Crossword.jsx'),
+      CrosswordModel = require('./models/CrosswordModel.js'),
+      data = require('./data.js');
 
-    document.onready = function() {
+
+  
+  /*  document.onready = function() {
         var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
-        React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
+        React.render(<Crossword model={model} rawData={data} title={data.gridinfo.name} clues={data.clues} numbered={data.numbered} cells={data.cells} size={data.gridinfo.size}/>, document.getElementById('app'));
     };
+  */
+   $.ajax({
+     url: "http://cruciverbalizer.com/jsonrand/99",
+     datatype: "json",
+     success: function(result) {
+     var data = JSON.parse(result);
+     var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
+     React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
+
+     }
+   });
 }(React, _));
 
 },{"./components/Crossword.jsx":5,"./data.js":6,"./models/CrosswordModel.js":8}],2:[function(require,module,exports){
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     getInitialState: function() {
+
+      console.log(this.props);
       return {
         value: this.props.value
       };
     },
     
     render: function() {
-      var fontSize = 100 / this.props.size,
+      var fontSize = this.props.size * 0.3,
           style = {
             width: this.props.size + "%",
-            fontSize: fontSize + 'pt',
+            fontSize: fontSize + 'vw',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
@@ -33,12 +48,12 @@
           },
           classes = React.addons.classSet({
             'cell': true,
+            'incorrect': this.props.value && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
             'input-cell': this.props.selected,
             'flex-centered': true,
             'focused': this.props.focused === true,
             'unplayable': !this.props.playable
           });
-      
       return (
         React.createElement("div", {style: style, className: classes}, 
           React.createElement("div", {style: numStyle, className: "cell-number"}, this.props.number), 
@@ -76,7 +91,7 @@
     },
     
     handleKeyDown: function(e) {
-      if (this.props.activeCell) {
+      if (this.props.activeCell !== undefined) {
           
         var values = this.state.cellValues,
             direction = this.props.direction;
@@ -219,9 +234,8 @@
         numbers[k] = count++;
       }
       return (
-        React.createElement("div", {onKeyUp: this.handleKeyUp, className: "cell-list"}, 
-          this.props.values.split("").map(function(cell, id) {    
-
+        React.createElement("div", {className: "cell-list"}, 
+        this.props.values.split("").map(function(cell, id) {
             return (
               React.createElement(Cell, {onClick: this.makeActive.bind(this, id), 
                     number: numbers[id + 1], 
@@ -308,7 +322,7 @@
       // FIXME
       this.handleMakeActive(this.state.activeCell);
     },
-        
+
     handleMakeActive: function(cellId) {
       this.setState({
         activeCell: cellId,
@@ -333,6 +347,7 @@
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-xs-8"}, 
             React.createElement("h1", null, this.props.title), 
+            
             React.createElement(Cells, {numbered: this.props.numbered, 
                    highlightedCells: this.props.model.wordAt(this.state.activeCell, this.state.direction), 
                    makeActive: this.handleMakeActive, 
@@ -343,6 +358,7 @@
                    size: this.props.size})
           ), 
           React.createElement("div", {className: "col-xs-4"}, 
+
             React.createElement(ClueList, {direction: "Across", 
                       directionEnum: DIRECTIONS.ACROSS, 
                       activeClue: this.state.activeAcrossClue, 
