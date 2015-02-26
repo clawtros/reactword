@@ -33,7 +33,7 @@
         if (e.which == 8) {
           e.preventDefault();
           e.stopPropagation();
-          this.currentWord();
+          
           if (values[this.props.activeCell] == undefined) {
             this.go(-1);
             values[this.props.activeCell] = undefined;

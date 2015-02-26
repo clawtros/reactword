@@ -23,7 +23,6 @@
     },
     
     componentDidMount: function() {
-      console.log(this.props.model);
     },
     
     handleMakeActive: function(cellId) {      
@@ -32,8 +31,10 @@
       });
     },
     
-    handleClueClick: function(clueId) {
+    handleClueClick: function(clueId, direction) {
       this.setState({
+        direction: direction,
+        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1,
         activeClue: clueId
       });
     },
@@ -54,10 +55,12 @@
           </div>
           <div className="col-xs-4">
             <ClueList direction="Across"
+                      directionEnum={DIRECTIONS.ACROSS}
                       activeClue={this.state.activeClue}
                       clues={this.props.clues.Across}
                       handleClueClick={this.handleClueClick}/>
             <ClueList direction="Down"
+                      directionEnum={DIRECTIONS.DOWN}
                       activeClue={this.state.activeClue}
                       clues={this.props.clues.Down}
                       handleClueClick={this.handleClueClick}/>

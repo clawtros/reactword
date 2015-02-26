@@ -6,6 +6,7 @@
         model = function (cells, size, rawData) {
             this.cells = cells,
             this.size = size;
+            this.rawData = rawData;
             this.lookupTable = this.buildLookupTable();
         };
     
@@ -31,12 +32,18 @@
     model.prototype = {
 
         buildLookupTable: function() {
-            for (var i = 0, l = this.cells.length; i < l; i++) {
-                if (this.cells[i] !== UNPLAYABLE) {
-                    console.log(this.wordAt(i, DIRECTIONS.ACROSS));
-                    console.log(this.wordAt(i, DIRECTIONS.DOWN));
-                }
+            
+            var acrossKey = DIRECTIONS.ACROSS,
+                downKey = DIRECTIONS.DOWN,
+                result = {},
+                numberedCells = Object.keys(this.rawData.numbered);
+
+            result.numberToCell = {};
+            for (var i = 1, l = numberedCells.length; i <= l; i++) {
+                result.numberToCell[i] = numberedCells[i - 1];
             }
+            console.log(this.rawData.numbered, result.numberToCell);
+            return result;
         },
         
         wordAt: function(position, direction) {

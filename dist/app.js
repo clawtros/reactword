@@ -88,7 +88,7 @@
         if (e.which == 8) {
           e.preventDefault();
           e.stopPropagation();
-          this.currentWord();
+          
           if (values[this.props.activeCell] == undefined) {
             this.go(-1);
             values[this.props.activeCell] = undefined;
@@ -228,7 +228,7 @@
 (function (React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     handleClick: function(clueId) {
-      this.props.handleClueClick(clueId, this.props.direction);
+      this.props.handleClueClick(clueId, this.props.directionEnum);
     },
     
     render: function () {
@@ -240,7 +240,7 @@
             });
         return (
           React.createElement("li", {className: classes, key: this.props.direction + "_" + clueId}, 
-            React.createElement("div", {className: "clue-phrase", onClick: this.handleClick.bind(this, clueId)}, 
+            React.createElement("div", {className: "clue-phrase", onClick: this.handleClick.bind(this, clueId, this.props.directionEnum)}, 
               React.createElement("div", {className: "clue-number"}, clue.clue_number), 
               clue.clue_text
             )
@@ -286,7 +286,6 @@
     },
     
     componentDidMount: function() {
-      console.log(this.props.model);
     },
     
     handleMakeActive: function(cellId) {      
@@ -295,8 +294,10 @@
       });
     },
     
-    handleClueClick: function(clueId) {
+    handleClueClick: function(clueId, direction) {
       this.setState({
+        direction: direction,
+        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1,
         activeClue: clueId
       });
     },
@@ -317,10 +318,12 @@
           ), 
           React.createElement("div", {className: "col-xs-4"}, 
             React.createElement(ClueList, {direction: "Across", 
+                      directionEnum: DIRECTIONS.ACROSS, 
                       activeClue: this.state.activeClue, 
                       clues: this.props.clues.Across, 
                       handleClueClick: this.handleClueClick}), 
             React.createElement(ClueList, {direction: "Down", 
+                      directionEnum: DIRECTIONS.DOWN, 
                       activeClue: this.state.activeClue, 
                       clues: this.props.clues.Down, 
                       handleClueClick: this.handleClueClick})
@@ -412,6 +415,7 @@
         model = function (cells, size, rawData) {
             this.cells = cells,
             this.size = size;
+            this.rawData = rawData;
             this.lookupTable = this.buildLookupTable();
         };
     
@@ -437,12 +441,18 @@
     model.prototype = {
 
         buildLookupTable: function() {
-            for (var i = 0, l = this.cells.length; i < l; i++) {
-                if (this.cells[i] !== UNPLAYABLE) {
-                    console.log(this.wordAt(i, DIRECTIONS.ACROSS));
-                    console.log(this.wordAt(i, DIRECTIONS.DOWN));
-                }
+            
+            var acrossKey = DIRECTIONS.ACROSS,
+                downKey = DIRECTIONS.DOWN,
+                result = {},
+                numberedCells = Object.keys(this.rawData.numbered);
+
+            result.numberToCell = {};
+            for (var i = 1, l = numberedCells.length; i <= l; i++) {
+                result.numberToCell[i] = numberedCells[i - 1];
             }
+            console.log(this.rawData.numbered, result.numberToCell);
+            return result;
         },
         
         wordAt: function(position, direction) {

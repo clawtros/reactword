@@ -1,7 +1,7 @@
 (function (React, module, undefined) {
   module.exports = React.createClass({
     handleClick: function(clueId) {
-      this.props.handleClueClick(clueId, this.props.direction);
+      this.props.handleClueClick(clueId, this.props.directionEnum);
     },
     
     render: function () {
@@ -13,7 +13,7 @@
             });
         return (
           <li className={classes} key={this.props.direction + "_" + clueId}>
-            <div className="clue-phrase" onClick={this.handleClick.bind(this, clueId)}>
+            <div className="clue-phrase" onClick={this.handleClick.bind(this, clueId, this.props.directionEnum)}>
               <div className="clue-number">{clue.clue_number}</div>
               {clue.clue_text}
             </div>
