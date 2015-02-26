@@ -1,10 +1,12 @@
-/*global React, module */
+/*global React, module, require */
+
 (function (React, module) {
     var DIRECTIONS = require('./Directions.js'),
-        model = function (cells, size) {
-            console.log('init');
+        UNPLAYABLE = require('./Unplayable.js'),
+        model = function (cells, size, rawData) {
             this.cells = cells,
             this.size = size;
+            this.lookupTable = this.buildLookupTable();
         };
     
     function range(start, stop, step){
@@ -27,6 +29,15 @@
     };
 
     model.prototype = {
+
+        buildLookupTable: function() {
+            for (var i = 0, l = this.cells.length; i < l; i++) {
+                if (this.cells[i] !== UNPLAYABLE) {
+                    console.log(this.wordAt(i, DIRECTIONS.ACROSS));
+                    console.log(this.wordAt(i, DIRECTIONS.DOWN));
+                }
+            }
+        },
         
         wordAt: function(position, direction) {
             var cells = [], result = [], start, end;

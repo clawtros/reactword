@@ -23,7 +23,7 @@
     },
     
     componentDidMount: function() {
-      console.log(this.model);
+      console.log(this.props.model);
     },
     
     handleMakeActive: function(cellId) {      
@@ -46,9 +46,9 @@
             <Cells numbered={this.props.numbered}
                    highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                    makeActive={this.handleMakeActive}
-        activeCell={this.state.activeCell}
+                   activeCell={this.state.activeCell}
                    direction={this.state.direction}
-                   toggleDirection={this.toggleDirection.bind(this)}
+                   toggleDirection={this.toggleDirection}
                    values={this.props.cells}
                    size={this.props.size}/>
           </div>
