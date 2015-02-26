@@ -104,4 +104,16 @@
 }
 div.container {
   width: 100%;
+  max-width: 1100px;
+  padding: 5px;
+}
+.small-vertical-space {
+  display: block;
+  height: 10px;
+}
+.clue-list-header {
+  margin: 0 0 5px 0;
+}
+label {
+  cursor: pointer;
 }

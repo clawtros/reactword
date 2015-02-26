@@ -21,8 +21,8 @@
                   'active-clue': parseInt(clueId) === activeClue
                 });
             return (
-              <li className={classes} key={this.props.direction + "_" + clueId}>
-                <div className="clue-phrase" onClick={this.handleClick.bind(this, clueId, this.props.directionEnum)}>
+              <li className={classes}  onClick={this.handleClick.bind(this, clueId, this.props.directionEnum)} key={this.props.direction + "_" + clueId}>
+                <div className="clue-phrase">
                   <div className="clue-number">{clue.clue_number}</div>
                   {clue.clue_text}
                 </div>
@@ -31,7 +31,7 @@
           }, this);
       
       return <div>
-       <h2>{this.props.direction}</h2>
+       <h2 className="clue-list-header">{this.props.direction}</h2>
        <div className="clue-list-container">
          <ul className="clue-list">
            {templated}

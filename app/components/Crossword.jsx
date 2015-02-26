@@ -50,8 +50,6 @@
       return (
         <div className="row">
           <div className="col-xs-8">
-            <h1>{this.props.title}</h1>
-            
             <Cells numbered={this.props.numbered}
                    highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                    highlightErrors={this.state.highlightErrors}
@@ -61,17 +59,18 @@
                    toggleDirection={this.toggleDirection}
                    values={this.props.cells}
                    size={this.props.size}/>
+            <label>
+              <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/>&nbsp;Highlight Errors
+            </label>
+
           </div>
           <div className="col-xs-4">
-            <label>
-              <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/>
-              Highlight Errors
-            </label>
             <ClueList direction="Across"
                       directionEnum={DIRECTIONS.ACROSS}
                       activeClue={this.state.activeAcrossClue}
                       clues={this.props.clues.Across}
                       handleClueClick={this.handleClueClick}/>
+            <div className="small-vertical-space"></div>
             <ClueList direction="Down"
                       directionEnum={DIRECTIONS.DOWN}
                       activeClue={this.state.activeDownClue}
