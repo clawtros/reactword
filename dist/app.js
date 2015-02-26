@@ -105,35 +105,53 @@
         }
 
         if (e.which >= 37 && e.which <= 40) {
-          switch (e.which) {
-            case 37:
-              if (direction == DIRECTIONS.ACROSS) {
-                this.go(-1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
-            case 39:
-              if (direction == DIRECTIONS.ACROSS) {
-                this.go(1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;              
-            case 38:
-              if (direction == DIRECTIONS.DOWN) {
-                this.go(-1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
-            case 40:
-              if (direction == DIRECTIONS.DOWN) {
-                this.go(1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
+          if (e.shiftKey) {
+            console.log(e.which);
+            switch (e.which) {
+              case 37:
+                this.go(-1, DIRECTIONS.ACROSS);
+                break;
+              case 39:
+                this.go(1, DIRECTIONS.ACROSS);
+                break;              
+              case 38:
+                this.go(-1, DIRECTIONS.DOWN);
+                break;
+              case 40:
+                this.go(1, DIRECTIONS.DOWN);
+                break;
+            }            
+          } else {
+            switch (e.which) {
+              case 37:
+                if (direction == DIRECTIONS.ACROSS) {
+                  this.go(-1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+              case 39:
+                if (direction == DIRECTIONS.ACROSS) {
+                  this.go(1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;              
+              case 38:
+                if (direction == DIRECTIONS.DOWN) {
+                  this.go(-1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+              case 40:
+                if (direction == DIRECTIONS.DOWN) {
+                  this.go(1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+            }
           }
         }
 
@@ -145,10 +163,9 @@
       }
     },
                                      
-    goOne: function(nextCell, delta) {
-      var direction = this.props.direction;
+    goOne: function(nextCell, delta, direction) {
       
-      nextCell += (this.props.direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
+      nextCell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
 
       if (nextCell > this.props.values.length) {
         nextCell -= this.props.values.length;
@@ -161,12 +178,13 @@
       return nextCell;
     },
 
-    go: function(delta) {
-      var initial = this.goOne(this.props.activeCell, delta),
+    go: function(delta, direction) {
+      var direction = direction || this.props.direction,
+          initial = this.goOne(this.props.activeCell, delta, direction),
           next = initial;
       
       while (this.props.values[next] === UNPLAYABLE) {        
-        next = this.goOne(next, delta);
+        next = this.goOne(next, delta, direction);
       }
       
       this.props.makeActive(next);
@@ -232,21 +250,24 @@
     },
     
     render: function () {
-      var templated = Object.keys(this.props.clues).map(function(clueId) {
-        var clue = this.props.clues[clueId],
-            classes = React.addons.classSet({
-              'clue-container': true,
-              'active-clue': clueId === this.props.activeClue
-            });
-        return (
-          React.createElement("li", {className: classes, key: this.props.direction + "_" + clueId}, 
-            React.createElement("div", {className: "clue-phrase", onClick: this.handleClick.bind(this, clueId, this.props.directionEnum)}, 
-              React.createElement("div", {className: "clue-number"}, clue.clue_number), 
-              clue.clue_text
+      console.log(this.props.activeClue);
+      
+      var activeClue = this.props.activeClue,
+          templated = Object.keys(this.props.clues).map(function(clueId) {
+            var clue = this.props.clues[clueId],
+                classes = React.addons.classSet({
+                  'clue-container': true,
+                  'active-clue': parseInt(clueId) === activeClue
+                });
+            return (
+              React.createElement("li", {className: classes, key: this.props.direction + "_" + clueId}, 
+                React.createElement("div", {className: "clue-phrase", onClick: this.handleClick.bind(this, clueId, this.props.directionEnum)}, 
+                  React.createElement("div", {className: "clue-number"}, clue.clue_number), 
+                  clue.clue_text
+                )
+              )
             )
-          )
-        )
-      }, this);
+          }, this);
       
       return React.createElement("div", null, 
        React.createElement("h2", null, this.props.direction), 
@@ -269,10 +290,6 @@
       DIRECTIONS = require('../models/Directions.js');
   
   module.exports = React.createClass({displayName: "exports",
-
-    buildLookupObject: function(cells, size) {
-      
-    },
     
     getInitialState: function() {
       return {
@@ -283,22 +300,26 @@
 
     toggleDirection: function() {
       this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+      // FIXME
+      this.handleMakeActive(this.state.activeCell);
     },
-    
-    componentDidMount: function() {
-    },
-    
-    handleMakeActive: function(cellId) {      
+        
+    handleMakeActive: function(cellId) {
       this.setState({
-        activeCell: cellId
+        activeCell: cellId,
+        activeDownClue: this.props.rawData.numbered[
+          Math.min.apply(this, this.props.model.wordAt(cellId, DIRECTIONS.DOWN)) + 1
+        ],
+        activeAcrossClue: this.props.rawData.numbered[
+          Math.min.apply(this, this.props.model.wordAt(cellId, DIRECTIONS.ACROSS)) + 1
+        ]
       });
     },
     
     handleClueClick: function(clueId, direction) {
       this.setState({
         direction: direction,
-        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1,
-        activeClue: clueId
+        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1 // FIXME:
       });
     },
     
@@ -319,12 +340,12 @@
           React.createElement("div", {className: "col-xs-4"}, 
             React.createElement(ClueList, {direction: "Across", 
                       directionEnum: DIRECTIONS.ACROSS, 
-                      activeClue: this.state.activeClue, 
+                      activeClue: this.state.activeAcrossClue, 
                       clues: this.props.clues.Across, 
                       handleClueClick: this.handleClueClick}), 
             React.createElement(ClueList, {direction: "Down", 
                       directionEnum: DIRECTIONS.DOWN, 
-                      activeClue: this.state.activeClue, 
+                      activeClue: this.state.activeDownClue, 
                       clues: this.props.clues.Down, 
                       handleClueClick: this.handleClueClick})
           )
@@ -451,7 +472,6 @@
             for (var i = 1, l = numberedCells.length; i <= l; i++) {
                 result.numberToCell[i] = numberedCells[i - 1];
             }
-            console.log(this.rawData.numbered, result.numberToCell);
             return result;
         },
         

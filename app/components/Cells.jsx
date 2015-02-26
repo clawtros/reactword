@@ -50,35 +50,53 @@
         }
 
         if (e.which >= 37 && e.which <= 40) {
-          switch (e.which) {
-            case 37:
-              if (direction == DIRECTIONS.ACROSS) {
-                this.go(-1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
-            case 39:
-              if (direction == DIRECTIONS.ACROSS) {
-                this.go(1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;              
-            case 38:
-              if (direction == DIRECTIONS.DOWN) {
-                this.go(-1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
-            case 40:
-              if (direction == DIRECTIONS.DOWN) {
-                this.go(1);
-              } else {
-                this.props.toggleDirection();
-              }
-              break;
+          if (e.shiftKey) {
+            console.log(e.which);
+            switch (e.which) {
+              case 37:
+                this.go(-1, DIRECTIONS.ACROSS);
+                break;
+              case 39:
+                this.go(1, DIRECTIONS.ACROSS);
+                break;              
+              case 38:
+                this.go(-1, DIRECTIONS.DOWN);
+                break;
+              case 40:
+                this.go(1, DIRECTIONS.DOWN);
+                break;
+            }            
+          } else {
+            switch (e.which) {
+              case 37:
+                if (direction == DIRECTIONS.ACROSS) {
+                  this.go(-1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+              case 39:
+                if (direction == DIRECTIONS.ACROSS) {
+                  this.go(1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;              
+              case 38:
+                if (direction == DIRECTIONS.DOWN) {
+                  this.go(-1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+              case 40:
+                if (direction == DIRECTIONS.DOWN) {
+                  this.go(1);
+                } else {
+                  this.props.toggleDirection();
+                }
+                break;
+            }
           }
         }
 
@@ -90,10 +108,9 @@
       }
     },
                                      
-    goOne: function(nextCell, delta) {
-      var direction = this.props.direction;
+    goOne: function(nextCell, delta, direction) {
       
-      nextCell += (this.props.direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
+      nextCell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
 
       if (nextCell > this.props.values.length) {
         nextCell -= this.props.values.length;
@@ -106,12 +123,13 @@
       return nextCell;
     },
 
-    go: function(delta) {
-      var initial = this.goOne(this.props.activeCell, delta),
+    go: function(delta, direction) {
+      var direction = direction || this.props.direction,
+          initial = this.goOne(this.props.activeCell, delta, direction),
           next = initial;
       
       while (this.props.values[next] === UNPLAYABLE) {        
-        next = this.goOne(next, delta);
+        next = this.goOne(next, delta, direction);
       }
       
       this.props.makeActive(next);

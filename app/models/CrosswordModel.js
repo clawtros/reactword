@@ -42,7 +42,6 @@
             for (var i = 1, l = numberedCells.length; i <= l; i++) {
                 result.numberToCell[i] = numberedCells[i - 1];
             }
-            console.log(this.rawData.numbered, result.numberToCell);
             return result;
         },
         

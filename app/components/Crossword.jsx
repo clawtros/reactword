@@ -6,10 +6,6 @@
       DIRECTIONS = require('../models/Directions.js');
   
   module.exports = React.createClass({
-
-    buildLookupObject: function(cells, size) {
-      
-    },
     
     getInitialState: function() {
       return {
@@ -20,22 +16,26 @@
 
     toggleDirection: function() {
       this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+      // FIXME
+      this.handleMakeActive(this.state.activeCell);
     },
-    
-    componentDidMount: function() {
-    },
-    
-    handleMakeActive: function(cellId) {      
+        
+    handleMakeActive: function(cellId) {
       this.setState({
-        activeCell: cellId
+        activeCell: cellId,
+        activeDownClue: this.props.rawData.numbered[
+          Math.min.apply(this, this.props.model.wordAt(cellId, DIRECTIONS.DOWN)) + 1
+        ],
+        activeAcrossClue: this.props.rawData.numbered[
+          Math.min.apply(this, this.props.model.wordAt(cellId, DIRECTIONS.ACROSS)) + 1
+        ]
       });
     },
     
     handleClueClick: function(clueId, direction) {
       this.setState({
         direction: direction,
-        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1,
-        activeClue: clueId
+        activeCell: this.props.model.lookupTable.numberToCell[clueId] - 1 // FIXME:
       });
     },
     
@@ -56,12 +56,12 @@
           <div className="col-xs-4">
             <ClueList direction="Across"
                       directionEnum={DIRECTIONS.ACROSS}
-                      activeClue={this.state.activeClue}
+                      activeClue={this.state.activeAcrossClue}
                       clues={this.props.clues.Across}
                       handleClueClick={this.handleClueClick}/>
             <ClueList direction="Down"
                       directionEnum={DIRECTIONS.DOWN}
-                      activeClue={this.state.activeClue}
+                      activeClue={this.state.activeDownClue}
                       clues={this.props.clues.Down}
                       handleClueClick={this.handleClueClick}/>
           </div>

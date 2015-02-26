@@ -5,21 +5,24 @@
     },
     
     render: function () {
-      var templated = Object.keys(this.props.clues).map(function(clueId) {
-        var clue = this.props.clues[clueId],
-            classes = React.addons.classSet({
-              'clue-container': true,
-              'active-clue': clueId === this.props.activeClue
-            });
-        return (
-          <li className={classes} key={this.props.direction + "_" + clueId}>
-            <div className="clue-phrase" onClick={this.handleClick.bind(this, clueId, this.props.directionEnum)}>
-              <div className="clue-number">{clue.clue_number}</div>
-              {clue.clue_text}
-            </div>
-          </li>
-        )
-      }, this);
+      console.log(this.props.activeClue);
+      
+      var activeClue = this.props.activeClue,
+          templated = Object.keys(this.props.clues).map(function(clueId) {
+            var clue = this.props.clues[clueId],
+                classes = React.addons.classSet({
+                  'clue-container': true,
+                  'active-clue': parseInt(clueId) === activeClue
+                });
+            return (
+              <li className={classes} key={this.props.direction + "_" + clueId}>
+                <div className="clue-phrase" onClick={this.handleClick.bind(this, clueId, this.props.directionEnum)}>
+                  <div className="clue-number">{clue.clue_number}</div>
+                  {clue.clue_text}
+                </div>
+              </li>
+            )
+          }, this);
       
       return <div>
        <h2>{this.props.direction}</h2>
