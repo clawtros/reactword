@@ -1,21 +1,41 @@
 (function(React, module, undefined) {
   var Cells = require('./Cells.jsx'),
-      ClueList = require('./ClueList.jsx');
-      
+      ClueList = require('./ClueList.jsx'),
+      CrosswordModel = require('../models/CrosswordModel.js'),
+      UNPLAYABLE = "#",
+      DIRECTIONS = require('../models/Directions.js');
+  
   module.exports = React.createClass({
 
+    buildLookupObject: function(cells, size) {
+      
+    },
+    
     getInitialState: function() {
       return {
-        activeCell: undefined
+        activeCell: undefined,
+        direction: DIRECTIONS.ACROSS
       };
+    },
+
+    toggleDirection: function() {
+      this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+    },
+    
+    componentDidMount: function() {
+      console.log(this.model);
     },
     
     handleMakeActive: function(cellId) {      
-      this.setState({'activeCell': cellId});
+      this.setState({
+        activeCell: cellId
+      });
     },
     
-    handleClueClick: function(clueId, direction) {
-      this.setState({activeClue: clueId});
+    handleClueClick: function(clueId) {
+      this.setState({
+        activeClue: clueId
+      });
     },
     
     render: function() {
@@ -24,8 +44,11 @@
           <div className="col-xs-8">
             <h1>{this.props.title}</h1>
             <Cells numbered={this.props.numbered}
+                   highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                    makeActive={this.handleMakeActive}
-                   activeCell={this.state.activeCell}
+        activeCell={this.state.activeCell}
+                   direction={this.state.direction}
+                   toggleDirection={this.toggleDirection.bind(this)}
                    values={this.props.cells}
                    size={this.props.size}/>
           </div>

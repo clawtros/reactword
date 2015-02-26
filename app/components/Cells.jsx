@@ -1,32 +1,9 @@
 (function(React, module, undefined) {
 
-
   var Cell = require('./Cell.jsx'),
       cw = require('../models/Crossword.js'),
       UNPLAYABLE = "#",
-      DIRECTIONS = {
-        ACROSS: [1, 0],
-        DOWN: [0, 1]
-      };
-  
-  function range(start, stop, step){
-    if (typeof stop=='undefined'){
-      // one param defined
-      stop = start;
-      start = 0;
-    };
-    if (typeof step=='undefined'){
-      step = 1;
-    };
-    if ((step>0 && start>=stop) || (step<0 && start<=stop)){
-      return [];
-    };
-    var result = [];
-    for (var i=start; step>0 ? i < stop : i > stop; i+=step){
-      result.push(i);
-    };
-    return result;
-  };
+      DIRECTIONS = require('../models/Directions.js');
 
   module.exports = React.createClass({
     getInitialState: function() {
@@ -43,50 +20,11 @@
       }
     },
     
-    currentWord: function() {
-      var position = this.props.activeCell,
-          direction = this.state.direction,
-          cells = [], result = [];
-      if (direction == DIRECTIONS.ACROSS) {
-        var start = Math.floor(position / this.props.size) * this.props.size,
-            end = start + this.props.size;
-        cells = range(start, end);
-      } else {
-        var start = position % this.props.size,
-            end = this.props.values.length;
-        cells = range(start, end, this.props.size);
-      }
-      var cellIndex = cells.indexOf(position),
-          left = [],
-          right = [],
-          i;
-      for (i = cellIndex; i < cells.length; i++) {
-        if (this.props.values[cells[i]] !== '#') {
-          right.push(cells[i]);
-        } else {
-          break;
-        }
-      }
-      for (i = cellIndex; i >= 0; i--) {
-        if (this.props.values[cells[i]] !== '#') {
-          left.push(cells[i]);
-        } else {
-          break;
-        }
-      }
-
-      return left.concat(right);
-    },
-
-    inWord: function(cell, cells) {
-      return cells.indexOf(cell) > -1;
-    },
-    
     handleKeyDown: function(e) {
       if (this.props.activeCell) {
           
         var values = this.state.cellValues,
-            direction = this.state.direction;
+            direction = this.props.direction;
             
         if (this.keysDown > 1) {
           this.go(1);
@@ -116,26 +54,30 @@
             case 37:
               if (direction == DIRECTIONS.ACROSS) {
                 this.go(-1);
+              } else {
+                this.props.toggleDirection();
               }
-              direction = DIRECTIONS.ACROSS;
               break;
             case 39:
               if (direction == DIRECTIONS.ACROSS) {
                 this.go(1);
+              } else {
+                this.props.toggleDirection();
               }
-              direction = DIRECTIONS.ACROSS;
               break;              
             case 38:
               if (direction == DIRECTIONS.DOWN) {
                 this.go(-1);
+              } else {
+                this.props.toggleDirection();
               }
-              direction = DIRECTIONS.DOWN;
               break;
             case 40:
               if (direction == DIRECTIONS.DOWN) {
                 this.go(1);
+              } else {
+                this.props.toggleDirection();
               }
-              direction = DIRECTIONS.DOWN;
               break;
           }
         }
@@ -147,11 +89,11 @@
         
       }
     },
-
+                                     
     goOne: function(nextCell, delta) {
-      var direction = this.state.direction;
+      var direction = this.props.direction;
       
-      nextCell += (this.state.direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
+      nextCell += (this.props.direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
 
       if (nextCell > this.props.values.length) {
         nextCell -= this.props.values.length;
@@ -173,7 +115,6 @@
       }
       
       this.props.makeActive(next);
-
     },
     
     componentDidMount: function() {
@@ -193,14 +134,14 @@
     },
 
     toggleDirection: function() {
-      this.setState({direction: this.state.direction == DIRECTIONS.ACROSS ? DIRECTIONS.DOWN : DIRECTIONS.ACROSS});
+      this.props.toggleDirection();
     },
     
     render: function() {
       var size = this.props.size,
           numbers = this.props.numbered,
           count = 1,
-          currentWord = this.currentWord();
+          highlightedCells = this.props.highlightedCells;
       
       for (var k in numbers) {
         numbers[k] = count++;
@@ -212,7 +153,7 @@
             return (
               <Cell onClick={this.makeActive.bind(this, id)}
                     number={numbers[id + 1]}
-                    focused={currentWord.indexOf(id) > -1}
+                    focused={highlightedCells.indexOf(id) > -1}
                     selected={id == this.props.activeCell}
                     key={id}
                     value={this.state.cellValues[id]}
