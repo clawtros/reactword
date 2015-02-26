@@ -8,48 +8,6 @@
         ACROSS: [1, 0],
         DOWN: [0, 1]
       };
-
-  var Model = {
-    size: 0,
-    values: [],
-    
-    currentWord: function(position, direction) {
-      var cells = [], result = [];
-      if (direction == DIRECTIONS.ACROSS) {
-        var start = Math.floor(position / this.size) * this.size,
-            end = start + this.size;
-        cells = range(start, end);
-      } else {
-        var start = position % this.size,
-            end = this.values.length;
-        cells = range(start, end, this.size);
-      }
-      var cellIndex = cells.indexOf(position),
-          left = [],
-          right = [],
-          i;
-      for (i = cellIndex; i < cells.length; i++) {
-        if (this.values[cells[i]] !== UNPLAYABLE) {
-          right.push(cells[i]);
-        } else {
-          break;
-        }
-      }
-      for (i = cellIndex; i >= 0; i--) {
-        if (this.props.values[cells[i]] !== UNPLAYABLE) {
-          left.push(cells[i]);
-        } else {
-          break;
-        }
-      }
-
-      return left.concat(right);
-    },
-
-    inWord: function(cell, cells) {
-      return cells.indexOf(cell) > -1;
-    }
-  };
   
   function range(start, stop, step){
     if (typeof stop=='undefined'){
@@ -71,12 +29,8 @@
   };
 
   module.exports = React.createClass({
-    keysDown: 0,
-    
     getInitialState: function() {
-      console.log("AAAH");
       return {
-        activeCell: undefined,
         direction: DIRECTIONS.ACROSS,
         keyIsDown: false,
         cellValues: []
@@ -85,12 +39,12 @@
     
     makeActive: function(id) {
       if (this.props.values[id] !== UNPLAYABLE) {
-        this.setState({ activeCell: id });
+        this.props.makeActive(id);
       }
     },
     
     currentWord: function() {
-      var position = this.state.activeCell,
+      var position = this.props.activeCell,
           direction = this.state.direction,
           cells = [], result = [];
       if (direction == DIRECTIONS.ACROSS) {
@@ -129,8 +83,7 @@
     },
     
     handleKeyDown: function(e) {
-      console.log(e.which);
-      if (this.state.activeCell) {
+      if (this.props.activeCell) {
           
         var values = this.state.cellValues,
             direction = this.state.direction;
@@ -143,18 +96,18 @@
           e.preventDefault();
           e.stopPropagation();
           this.currentWord();
-          if (values[this.state.activeCell] == undefined) {
+          if (values[this.props.activeCell] == undefined) {
             this.go(-1);
-            values[this.state.activeCell] = undefined;
+            values[this.props.activeCell] = undefined;
           } else {
-            values[this.state.activeCell] = undefined;
+            values[this.props.activeCell] = undefined;
             this.go(-1);
           }
 
         }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
-          values[this.state.activeCell] = String.fromCharCode(e.which);
+          values[this.props.activeCell] = String.fromCharCode(e.which);
           this.go(1);
         }
 
@@ -212,16 +165,14 @@
     },
 
     go: function(delta) {
-      var initial = this.goOne(this.state.activeCell, delta),
+      var initial = this.goOne(this.props.activeCell, delta),
           next = initial;
       
       while (this.props.values[next] === UNPLAYABLE) {        
         next = this.goOne(next, delta);
       }
       
-      this.setState({
-        activeCell: next
-      });
+      this.props.makeActive(next);
 
     },
     
@@ -262,7 +213,7 @@
               <Cell onClick={this.makeActive.bind(this, id)}
                     number={numbers[id + 1]}
                     focused={currentWord.indexOf(id) > -1}
-                    selected={id == this.state.activeCell}
+                    selected={id == this.props.activeCell}
                     key={id}
                     value={this.state.cellValues[id]}
                     playable={cell !== UNPLAYABLE}

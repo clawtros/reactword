@@ -7,10 +7,10 @@
     },
     
     render: function() {
-      var fact = true,
+      var fontSize = 100 / this.props.size,
           style = {
             width: this.props.size + "%",
-            fontSize: this.props.size * 0.4 + 'vw',
+            fontSize: fontSize + 'pt',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
