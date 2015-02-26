@@ -170,7 +170,8 @@
               <Cell onClick={this.makeActive.bind(this, id)}
                     number={numbers[id + 1]}
                     focused={highlightedCells.indexOf(id) > -1}
-                    selected={id == this.props.activeCell}
+              selected={id == this.props.activeCell}
+              highlightErrors={this.props.highlightErrors}
                     key={id}
                     value={this.state.cellValues[id]}
                     playable={cell !== UNPLAYABLE}

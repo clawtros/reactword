@@ -13,7 +13,7 @@
     };
   */
    $.ajax({
-     url: "http://cruciverbalizer.com/jsonrand/99",
+     url: "http://cruciverbalizer.com/jsonrand/77",
      datatype: "json",
      success: function(result) {
      var data = JSON.parse(result);

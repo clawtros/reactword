@@ -9,6 +9,7 @@
     
     getInitialState: function() {
       return {
+        highlightErrors: false,
         activeCell: undefined,
         direction: DIRECTIONS.ACROSS
       };
@@ -38,6 +39,12 @@
       this.handleMakeActive(this.props.model.lookupTable.numberToCell[clueId] - 1);
       
     },
+
+    toggleHighlightErrors: function() {
+      this.setState({
+        highlightErrors: !this.state.highlightErrors
+      });
+    },
     
     render: function() {
       return (
@@ -47,6 +54,7 @@
             
             <Cells numbered={this.props.numbered}
                    highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
+                   highlightErrors={this.state.highlightErrors}
                    makeActive={this.handleMakeActive}
                    activeCell={this.state.activeCell}
                    direction={this.state.direction}
@@ -55,7 +63,10 @@
                    size={this.props.size}/>
           </div>
           <div className="col-xs-4">
-
+            <label>
+              <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/>
+              Highlight Errors
+            </label>
             <ClueList direction="Across"
                       directionEnum={DIRECTIONS.ACROSS}
                       activeClue={this.state.activeAcrossClue}

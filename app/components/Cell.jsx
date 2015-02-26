@@ -20,7 +20,7 @@
           },
           classes = React.addons.classSet({
             'cell': true,
-            'incorrect': this.props.value && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
+            'incorrect': this.props.value && this.props.highlightErrors && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
             'input-cell': this.props.selected,
             'flex-centered': true,
             'focused': this.props.focused === true,

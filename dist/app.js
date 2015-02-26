@@ -14,7 +14,7 @@
     };
   */
    $.ajax({
-     url: "http://cruciverbalizer.com/jsonrand/99",
+     url: "http://cruciverbalizer.com/jsonrand/77",
      datatype: "json",
      success: function(result) {
      var data = JSON.parse(result);
@@ -48,7 +48,7 @@
           },
           classes = React.addons.classSet({
             'cell': true,
-            'incorrect': this.props.value && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
+            'incorrect': this.props.value && this.props.highlightErrors && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
             'input-cell': this.props.selected,
             'flex-centered': true,
             'focused': this.props.focused === true,
@@ -240,7 +240,8 @@
               React.createElement(Cell, {onClick: this.makeActive.bind(this, id), 
                     number: numbers[id + 1], 
                     focused: highlightedCells.indexOf(id) > -1, 
-                    selected: id == this.props.activeCell, 
+              selected: id == this.props.activeCell, 
+              highlightErrors: this.props.highlightErrors, 
                     key: id, 
                     value: this.state.cellValues[id], 
                     playable: cell !== UNPLAYABLE, 
@@ -312,6 +313,7 @@
     
     getInitialState: function() {
       return {
+        highlightErrors: false,
         activeCell: undefined,
         direction: DIRECTIONS.ACROSS
       };
@@ -341,6 +343,12 @@
       this.handleMakeActive(this.props.model.lookupTable.numberToCell[clueId] - 1);
       
     },
+
+    toggleHighlightErrors: function() {
+      this.setState({
+        highlightErrors: !this.state.highlightErrors
+      });
+    },
     
     render: function() {
       return (
@@ -350,6 +358,7 @@
             
             React.createElement(Cells, {numbered: this.props.numbered, 
                    highlightedCells: this.props.model.wordAt(this.state.activeCell, this.state.direction), 
+                   highlightErrors: this.state.highlightErrors, 
                    makeActive: this.handleMakeActive, 
                    activeCell: this.state.activeCell, 
                    direction: this.state.direction, 
@@ -358,7 +367,10 @@
                    size: this.props.size})
           ), 
           React.createElement("div", {className: "col-xs-4"}, 
-
+            React.createElement("label", null, 
+              React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), 
+              "Highlight Errors"
+            ), 
             React.createElement(ClueList, {direction: "Across", 
                       directionEnum: DIRECTIONS.ACROSS, 
                       activeClue: this.state.activeAcrossClue, 
