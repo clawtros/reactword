@@ -8,8 +8,8 @@
       var node = this.getDOMNode(),
           container = $(node).find('.clue-list-container'),
           activeClue = container.find('.active-clue'),
-          newTop = activeClue.offset().top - container.offset().top;
-      container.animate({ scrollTop : "+=" + newTop}, 50);
+          newTop = activeClue.offset().top - container.offset().top - container.height() / 2 + activeClue.height() / 2;
+      container.animate({ scrollTop : "+=" + newTop}, 150);
     },
     
     render: function () {
