@@ -366,7 +366,7 @@
                    values: this.props.cells, 
                    size: this.props.size}), 
             React.createElement("label", null, 
-              React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), " Highlight Errors"
+              React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), " Highlight Errors"
             )
 
           ), 
