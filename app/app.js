@@ -11,6 +11,7 @@
     document.onready = function() {
       var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
       React.render(<Crossword model={model} rawData={data} title={data.gridinfo.name} clues={data.clues} numbered={data.numbered} cells={data.cells} size={data.gridinfo.size}/>, document.getElementById('app'));
+      $('.loading').css({ display: "none" });
     };
   } else {
    $.ajax({
@@ -21,7 +22,8 @@
        var data = JSON.parse(result);
        var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
        React.render(<Crossword model={model} rawData={data} title={data.gridinfo.name} clues={data.clues} numbered={data.numbered} cells={data.cells} size={data.gridinfo.size}/>, document.getElementById('app'));
-       $('.loading').css({ display: "none" });
+       $('.loading').addClass('out');
+       $('#app').removeClass('out');
      }
    });
   }
