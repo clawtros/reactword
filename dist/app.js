@@ -4,35 +4,35 @@
 (function(React, _) {
   var Crossword = require('./components/Crossword.jsx'),
       CrosswordModel = require('./models/CrosswordModel.js'),
-      data = require('./data.js');
-
-
+      data = require('./data.js')
+    getRemotely = true;
   
-   document.onready = function() {
-        var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
-        React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
-   };
-  /*
+
+  if (!getRemotely) {
+    document.onready = function() {
+      var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
+      React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
+    };
+  } else {
    $.ajax({
      url: "http://cruciverbalizer.com/jsonrand/9",
      datatype: "json",
      success: function(result) {
-     var data = JSON.parse(result);
-     var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
-     React.render(<Crossword model={model} rawData={data} title={data.gridinfo.name} clues={data.clues} numbered={data.numbered} cells={data.cells} size={data.gridinfo.size}/>, document.getElementById('app'));
 
+       var data = JSON.parse(result);
+       var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
+       React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
+       $('.loading').css({ display: "none" });
      }
    });
-  
-  */
+  }
+
 }(React, _));
 
 },{"./components/Crossword.jsx":5,"./data.js":6,"./models/CrosswordModel.js":8}],2:[function(require,module,exports){
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     getInitialState: function() {
-
-      console.log(this.props);
       return {
         value: this.props.value
       };
@@ -269,8 +269,8 @@
       var node = this.getDOMNode(),
           container = $(node).find('.clue-list-container'),
           activeClue = container.find('.active-clue'),
-          newTop = activeClue.offset().top - container.offset().top;
-      container.animate({ scrollTop : "+=" + newTop}, 50);
+          newTop = activeClue.offset().top - container.offset().top - container.height() / 2 + activeClue.height() / 2;
+      container.animate({ scrollTop : "+=" + newTop}, 150);
     },
     
     render: function () {
