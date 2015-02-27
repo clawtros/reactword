@@ -32,7 +32,7 @@
         ]
       });
     },
-    
+
     handleClueClick: function(clueId, direction) {
       this.state.direction = direction;
       // FIXME

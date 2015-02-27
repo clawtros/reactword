@@ -21,8 +21,9 @@
     },
     
     handleKeyDown: function(e) {
+
       if (this.props.activeCell !== undefined) {
-          
+        
         var values = this.state.cellValues,
             direction = this.props.direction;
             
@@ -43,6 +44,7 @@
           }
 
         }
+
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
           values[this.props.activeCell] = String.fromCharCode(e.which);
@@ -111,7 +113,7 @@
       
       nextCell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
 
-      if (nextCell > this.props.values.length) {
+      if (nextCell >= this.props.values.length) {
         nextCell -= this.props.values.length;
       }
       
