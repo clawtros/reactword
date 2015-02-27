@@ -15,7 +15,7 @@
     };
   } else {
    $.ajax({
-     url: "http://cruciverbalizer.com/jsonrand/9",
+     url: "http://cruciverbalizer.com/jsonrand/99",
      datatype: "json",
      success: function(result) {
 
