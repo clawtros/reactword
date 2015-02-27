@@ -1,8 +1,6 @@
 (function(React, module, undefined) {
   module.exports = React.createClass({
     getInitialState: function() {
-
-      console.log(this.props);
       return {
         value: this.props.value
       };
