@@ -60,7 +60,7 @@
                    values={this.props.cells}
                    size={this.props.size}/>
             <label>
-              <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/>&nbsp;Highlight Errors
+              <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/> Highlight Errors
             </label>
 
           </div>
