@@ -344,8 +344,7 @@
           l = this.getClueNumbers(this.state.direction),
           d = delta || 1,
           index = l.indexOf(currentWordNumber) + d,
-          target = l[index < 0 ? l.length : index];
-      
+          target = l[index < 0 ? l.length - 1 : index];
       this.handleClueClick(target, this.state.direction);
     },
 
