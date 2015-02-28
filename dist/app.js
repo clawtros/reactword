@@ -1,23 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*global React, _, require */
+/*global React, _, require, clearInterval, setInterval, $ */
 
 (function(React, _) {
   var Crossword = require('./components/Crossword.jsx'),
       CrosswordModel = require('./models/CrosswordModel.js'),
       data = require('./data.js'),
       getRemotely = true,
-      testLoading = true;
-  
-
-  if (!getRemotely) {
-      document.onready = function() {
-          var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
-          React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
-          $('.loading').addClass('out');
-          $('#app').removeClass('out');
-      };
-  } else {
-      document.onready = function() {
+      testLoading = true,
+      makeLoader = function() {
           var container = $('#loading_container'),
               interval;
           for (var i = 0; i < 100; i++) {
@@ -29,7 +19,22 @@
               target.toggleClass('highlighted');
           }
           
-          interval = setInterval(randomlyFlip, 100);
+          return setInterval(randomlyFlip, 100);
+      };
+
+
+    
+
+  if (!getRemotely) {
+      document.onready = function() {
+          var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
+          React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
+          $('.loading').addClass('out');
+          $('#app').removeClass('out');
+      };
+  } else {
+      document.onready = function() {
+          var interval = makeLoader();
           $.ajax({
               url: "http://cruciverbalizer.com/jsonrand/99",
               datatype: "json",

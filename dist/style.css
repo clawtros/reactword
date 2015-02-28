@@ -148,6 +148,14 @@ label {
   float: right;
   transition: background-color 0.5s;
 }
+.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  color: black;
+  text-shadow: 0 0 2px #ccc;
+}
 .highlighted {
   background-color: black;
 }
