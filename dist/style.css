@@ -141,3 +141,13 @@ label {
   text-overflow: ellipsis;
   max-width: 100%;
 }
+.foo {
+  border: 1px solid black;
+  width: 10%;
+  padding-top: 10%;
+  float: right;
+  transition: background-color 0.5s;
+}
+.highlighted {
+  background-color: black;
+}
