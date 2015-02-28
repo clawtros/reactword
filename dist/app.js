@@ -15,7 +15,7 @@
           }
           
           function randomlyFlip() {
-              var target = $($('.foo')[parseInt(Math.random() * 100)]);
+              var target = $($('.foo')[parseInt(Math.random() * 60)]);
               target.toggleClass('highlighted');
           }
           
