@@ -444,7 +444,7 @@
     module.exports = React.createClass({displayName: "exports",
         render: function() {
             return (
-                React.createElement("h3", null, this.props.clue.clue_number, this.props.direction == DIRECTIONS.ACROSS ? 'A' : 'D', " ", this.props.clue.clue_text)
+                React.createElement("h3", {className: "current-clue"}, this.props.clue.clue_number, this.props.direction == DIRECTIONS.ACROSS ? 'A' : 'D', " ", React.createElement("span", {className: "current-clue-text"}, this.props.clue.clue_text))
             );
         }
     });
