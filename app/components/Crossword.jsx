@@ -11,8 +11,18 @@
       return {
         highlightErrors: false,
         activeCell: undefined,
-        direction: DIRECTIONS.ACROSS
+        direction: DIRECTIONS.ACROSS,
+        
       };
+    },
+
+    handleSkipWord: function(delta) {
+      var currentWordNumber = this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(this.state.activeCell, this.state.direction)) + 1],
+          l = Object.keys(this.state.direction === DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down)
+                    .map(function(e) { return parseInt(e, 10) }),
+          d = delta || 1,
+          target = l[l.indexOf(currentWordNumber) + d];
+      this.handleClueClick(target, this.state.direction);
     },
 
     toggleDirection: function() {
@@ -56,6 +66,7 @@
                    makeActive={this.handleMakeActive}
                    activeCell={this.state.activeCell}
                    direction={this.state.direction}
+                   skipWord={this.handleSkipWord}
                    toggleDirection={this.toggleDirection}
                    values={this.props.cells}
                    size={this.props.size}/>

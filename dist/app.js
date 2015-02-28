@@ -4,8 +4,8 @@
 (function(React, _) {
   var Crossword = require('./components/Crossword.jsx'),
       CrosswordModel = require('./models/CrosswordModel.js'),
-      data = require('./data.js')
-    getRemotely = true;
+      data = require('./data.js'),
+      getRemotely = true, testLoading = false;
   
 
   if (!getRemotely) {
@@ -19,7 +19,6 @@
      url: "http://cruciverbalizer.com/jsonrand/99",
      datatype: "json",
      success: function(result) {
-
        var data = JSON.parse(result);
        var model = new CrosswordModel(data.cells, data.gridinfo.size, data);
        React.render(React.createElement(Crossword, {model: model, rawData: data, title: data.gridinfo.name, clues: data.clues, numbered: data.numbered, cells: data.cells, size: data.gridinfo.size}), document.getElementById('app'));
@@ -119,6 +118,11 @@
 
         }
 
+        if (e.which == 9) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.props.skipWord(e.shiftKey ? -1 : 1);
+        }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
           values[this.props.activeCell] = String.fromCharCode(e.which);
@@ -321,8 +325,18 @@
       return {
         highlightErrors: false,
         activeCell: undefined,
-        direction: DIRECTIONS.ACROSS
+        direction: DIRECTIONS.ACROSS,
+        
       };
+    },
+
+    handleSkipWord: function(delta) {
+      var currentWordNumber = this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(this.state.activeCell, this.state.direction)) + 1],
+          l = Object.keys(this.state.direction === DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down)
+                    .map(function(e) { return parseInt(e, 10) }),
+          d = delta || 1,
+          target = l[l.indexOf(currentWordNumber) + d];
+      this.handleClueClick(target, this.state.direction);
     },
 
     toggleDirection: function() {
@@ -366,6 +380,7 @@
                    makeActive: this.handleMakeActive, 
                    activeCell: this.state.activeCell, 
                    direction: this.state.direction, 
+                   skipWord: this.handleSkipWord, 
                    toggleDirection: this.toggleDirection, 
                    values: this.props.cells, 
                    size: this.props.size}), 

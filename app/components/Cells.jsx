@@ -45,6 +45,11 @@
 
         }
 
+        if (e.which == 9) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.props.skipWord(e.shiftKey ? -1 : 1);
+        }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
           values[this.props.activeCell] = String.fromCharCode(e.which);
