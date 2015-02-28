@@ -330,12 +330,22 @@
       };
     },
 
+    getWordNumber: function(cell, direction) {
+      return this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(cell, direction)) + 1]
+    },
+
+    getClueNumbers: function(direction) {
+      return Object.keys(direction === DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down)
+                   .map(function(e) { return parseInt(e, 10) });
+    },
+
     handleSkipWord: function(delta) {
-      var currentWordNumber = this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(this.state.activeCell, this.state.direction)) + 1],
-          l = Object.keys(this.state.direction === DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down)
-                    .map(function(e) { return parseInt(e, 10) }),
+      var currentWordNumber = this.getWordNumber(this.state.activeCell, this.state.direction),
+          l = this.getClueNumbers(this.state.direction),
           d = delta || 1,
-          target = l[l.indexOf(currentWordNumber) + d];
+          index = l.indexOf(currentWordNumber) + d,
+          target = l[index < 0 ? l.length : index];
+      
       this.handleClueClick(target, this.state.direction);
     },
 
