@@ -64,6 +64,9 @@
         }
 
         if (e.which >= 37 && e.which <= 40) {
+          e.preventDefault();
+          e.stopPropagation();
+
           if (e.shiftKey) {
             switch (e.which) {
               case 37:
