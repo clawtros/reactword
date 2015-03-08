@@ -1,15 +1,14 @@
 (function(React, module, undefined) {
   module.exports = React.createClass({
-    
     render: function() {
-      var fontSize = this.props.size * 0.3,
+      var fontSize = this.props.size * 0.4,
           style = {
             width: this.props.size + "%",
             fontSize: fontSize + 'vw',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
-            fontSize: this.props.size + 'pt'
+            fontSize: this.props.size * 0.7 + 'pt'
           },
           classes = React.addons.classSet({
             'cell': true,
