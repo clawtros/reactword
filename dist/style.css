@@ -3,6 +3,7 @@
   opacity: 1;
 }
 .keyboard {
+  padding: 20px 0;
   opacity: 0;
   transform: translateY(100%);
   position: fixed;
@@ -211,6 +212,7 @@ label {
   opacity: 1;
 }
 .keyboard {
+  padding: 20px 0;
   opacity: 0;
   transform: translateY(100%);
   position: fixed;
@@ -261,9 +263,12 @@ label {
     top: 0;
     width: 100%;
     left: 0;
-    font-size: 75%;
+    font-size: 12pt;
+    height: 80px;
+    max-height: 80px;
+    overflow-y: auto;
   }
   div.cell-list {
-    padding-top: 120px;
+    margin-top: 80px;
   }
 }
