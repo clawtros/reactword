@@ -178,8 +178,6 @@ label {
     max-width: 100%;
 }
 
-
-
 .foo {
     width: 10%;
     padding-top: 10%;
@@ -225,6 +223,14 @@ label {
         height: 80px;
         max-height: 80px;
         overflow-y: auto;
+    }
+
+    label.keyboard-label {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 10001;
+        color: white;
     }
 
     div.cell-list {
