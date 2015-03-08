@@ -261,6 +261,7 @@ label {
     top: 0;
     width: 100%;
     left: 0;
+    font-size: 75%;
   }
   div.cell-list {
     padding-top: 120px;
