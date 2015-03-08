@@ -134,14 +134,14 @@
             </div>
             <div className="col-lg-4">
               <div className="row">
-                <div className={"col-xs-6"}>
+                <div className={"col-xs-6 col-lg-12"}>
                   <ClueList direction="Across"
                             directionEnum={DIRECTIONS.ACROSS}
                             activeClue={this.state.activeAcrossClue}
                             clues={this.props.clues.Across}
                             handleClueClick={this.handleClueClick}/>
                 </div>
-                <div className={"col-xs-6"}>
+                <div className={"col-xs-6 col-lg-12"}>
                   <ClueList direction="Down"
                             directionEnum={DIRECTIONS.DOWN}
                             activeClue={this.state.activeDownClue}

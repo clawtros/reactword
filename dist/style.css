@@ -187,8 +187,8 @@ label {
   max-width: 100%;
 }
 .foo {
-  width: 5%;
-  padding-top: 5%;
+  width: 10%;
+  padding-top: 10%;
   float: right;
   transition: background-color 0.5s, transform 0.5s;
 }
@@ -249,7 +249,7 @@ label {
   top: 0;
   right: 0;
 }
-@media only screen and (max-width: 60em) {
+@media only screen and (max-width: 48em) {
   /* looks like z-index isn't playing nicely on the mobile with the transforms */
   div.input-cell {
     /*        transform: scale(1);*/
