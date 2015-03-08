@@ -19,7 +19,12 @@
     },
 
     getWordNumber: function(cell, direction) {
-      return this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(cell, direction)) + 1]
+      // get the minimum cell from the word
+      return this.props.rawData.numbered[
+        Math.min.apply(
+          this,
+          this.props.model.wordAt(cell, direction)
+        ) + 1]
     },
 
     getClueNumbers: function(direction) {
@@ -34,6 +39,7 @@
           index = l.indexOf(currentWordNumber) + d,
           // TODO: remove this monstrosity
           target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
+      console.log(index, target, this.state.activeCell, this.state.direction);
       this.handleClueClick(target, this.state.direction);
     },
 
@@ -72,18 +78,25 @@
     },
 
     toggleKeyboard: function() {
+      if (this.state.activeCell === undefined) {
+        this.handleSkipWord();
+      }
       this.setState({
         showKeyboard: !this.state.showKeyboard
       });
     },
 
     getClue: function(number, direction) {
-      var clues = direction == DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down;
+      var clues = direction == DIRECTIONS.ACROSS ?
+                               this.props.rawData.clues.Across :
+                               this.props.rawData.clues.Down;
       return clues[number] || {};
     },
 
     getCurrentClueNumber: function() {
-      return this.state.direction == DIRECTIONS.ACROSS ? this.state.activeAcrossClue : this.state.activeDownClue;
+      return this.state.direction == DIRECTIONS.ACROSS ?
+                                     this.state.activeAcrossClue :
+                                     this.state.activeDownClue;
     },
 
     closeKeyboard: function() {
@@ -106,7 +119,7 @@
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-8">
+            <div className="col-md-8">
               <Cells numbered={this.props.numbered}
                      highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                      highlightErrors={this.state.highlightErrors}
@@ -118,7 +131,6 @@
                      showKeyboard={this.state.showKeyboard}
                      closeKeyboard={this.closeKeyboard}
                      toggleDirection={this.toggleDirection}
-        
                      values={this.props.cells}
                      size={this.props.size}/>
               <label>
@@ -127,27 +139,27 @@
               <label>
                 <input type="checkbox" onChange={this.toggleRevealEverything} checked={this.state.revealEverything}/> Reveal Answers
               </label>
-              <label>
+              <label className="keyboard-label">
                 <input type="checkbox" onChange={this.toggleKeyboard} checked={this.state.showKeyboard}/> Show Keyboard
               </label>
             </div>
-            <div className="col-lg-4">
+            <div className="col-md-4">
               <div className="row">
-                <div className={"col-xs-6 col-lg-12"}>
+                <div className={"col-xs-6 col-md-12"}>
                   <ClueList direction="Across"
                             directionEnum={DIRECTIONS.ACROSS}
                             activeClue={this.state.activeAcrossClue}
                             clues={this.props.clues.Across}
                             handleClueClick={this.handleClueClick}/>
                 </div>
-                <div className={"col-xs-6 col-lg-12"}>
+                <div className={"col-xs-6 col-md-12"}>
                   <ClueList direction="Down"
                             directionEnum={DIRECTIONS.DOWN}
                             activeClue={this.state.activeDownClue}
                             clues={this.props.clues.Down}
                             handleClueClick={this.handleClueClick}/>
                 </div>
-              </div>react 
+              </div>
             </div>
           </div>
         </div>
