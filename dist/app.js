@@ -4,26 +4,28 @@
 (function(React, _) {
   var Crossword = require('./components/Crossword.jsx'),
       CrosswordModel = require('./models/CrosswordModel.js'),
+      numloadingcells = 400,
       data = require('./data.js'),
       getRemotely = true,
       testLoading = true,
       makeLoader = function() {
           var container = $('#loading_container'),
               interval;
-          for (var i = 0; i < 100; i++) {
+          for (var i = 0; i < numloadingcells; i++) {
               container.append('<div class="foo"></div>');
           }
           
           function randomlyFlip() {
-              var target = $($('.foo')[parseInt(Math.random() * 60)]);
+              var targetIndex = parseInt(Math.random() * numloadingcells / 2),
+                  target = $($('.foo')[targetIndex]),
+                  oppositeTarget = $($('.foo')[numloadingcells - targetIndex]);
+
               target.toggleClass('highlighted');
+              oppositeTarget.toggleClass('highlighted');
           }
           
           return setInterval(randomlyFlip, 100);
       };
-
-
-    
 
   if (!getRemotely) {
       document.onready = function() {
@@ -45,6 +47,12 @@
                   $('.loading').addClass('out');
                   $('#app').removeClass('out');
                   clearInterval(interval);
+              },
+              error: function() {
+                  alert('kaboom');
+                  $('.loading').addClass('out');
+                  $('#app').removeClass('out');
+                  clearInterval(interval);
               }
           });
       };
@@ -55,11 +63,6 @@
 },{"./components/Crossword.jsx":5,"./data.js":7,"./models/CrosswordModel.js":9}],2:[function(require,module,exports){
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
-    getInitialState: function() {
-      return {
-        value: this.props.value
-      };
-    },
     
     render: function() {
       var fontSize = this.props.size * 0.3,
@@ -84,7 +87,7 @@
           React.createElement("div", {style: numStyle, className: "cell-number"}, this.props.number), 
           React.createElement("div", {onClick: this.props.onClick, 
                className: "cell-content flex-centered"}, 
-            this.props.playable ? this.props.value : ""
+            this.props.playable ? (this.props.reveal ? this.props.correctValue : this.props.value) : ""
           )
         )
       );
@@ -118,14 +121,8 @@
     handleKeyDown: function(e) {
 
       if (this.props.activeCell !== undefined) {
-        
         var values = this.state.cellValues,
             direction = this.props.direction;
-            
-        if (this.keysDown > 1) {
-          this.go(1);
-        }
-
         if (e.which == 8) {
           e.preventDefault();
           e.stopPropagation();
@@ -147,8 +144,13 @@
         }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
+          var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
           values[this.props.activeCell] = String.fromCharCode(e.which);
-          this.go(1);
+          if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
+            this.go(1);
+          } else {
+            this.props.skipWord(1);
+          }
         }
 
         if (e.which >= 37 && e.which <= 40) {
@@ -209,28 +211,27 @@
       }
     },
                                      
-    goOne: function(nextCell, delta, direction) {
+    nextCellFrom: function(cell, delta, direction) {      
+      cell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
       
-      nextCell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
-
-      if (nextCell >= this.props.values.length) {
-        nextCell -= this.props.values.length;
+      if (cell >= this.props.values.length) {
+        cell -= this.props.values.length;
       }
       
-      if (nextCell < 0) {
-        nextCell = this.props.values.length + nextCell;
+      if (cell < 0) {
+        cell = this.props.values.length + cell;
       }
       
-      return nextCell;
+      return cell;
     },
 
     go: function(delta, direction) {
       var direction = direction || this.props.direction,
-          initial = this.goOne(this.props.activeCell, delta, direction),
+          initial = this.nextCellFrom(this.props.activeCell, delta, direction),
           next = initial;
       
       while (this.props.values[next] === UNPLAYABLE) {        
-        next = this.goOne(next, delta, direction);
+        next = this.nextCellFrom(next, delta, direction);
       }
       
       this.props.makeActive(next);
@@ -265,15 +266,17 @@
       for (var k in numbers) {
         numbers[k] = count++;
       }
+      
       return (
         React.createElement("div", {className: "cell-list"}, 
         this.props.values.split("").map(function(cell, id) {
             return (
               React.createElement(Cell, {onClick: this.makeActive.bind(this, id), 
                     number: numbers[id + 1], 
+                    reveal: this.props.revealEverything, 
                     focused: highlightedCells.indexOf(id) > -1, 
-              selected: id == this.props.activeCell, 
-              highlightErrors: this.props.highlightErrors, 
+                    selected: id == this.props.activeCell, 
+                    highlightErrors: this.props.highlightErrors, 
                     key: id, 
                     value: this.state.cellValues[id], 
                     playable: cell !== UNPLAYABLE, 
@@ -346,6 +349,7 @@
 
     getInitialState: function() {
       return {
+        revealEverything: false,
         highlightErrors: false,
         activeCell: undefined,
         direction: DIRECTIONS.ACROSS,
@@ -366,7 +370,9 @@
           l = this.getClueNumbers(this.state.direction),
           d = delta || 1,
           index = l.indexOf(currentWordNumber) + d,
-          target = l[index < 0 ? l.length - 1 : index];
+          // TODO: remove this monstrosity
+          target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
+      console.log(index, target, index < 0 ? l.length - 1 : index, l.length);
       this.handleClueClick(target, this.state.direction);
     },
 
@@ -398,6 +404,12 @@
       });
     },
 
+    toggleRevealEverything: function() {
+      this.setState({
+        revealEverything: !this.state.revealEverything
+      });
+    },
+
     getClue: function(number, direction) {
       var clues = direction == DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down;
       return clues[number] || {};
@@ -412,11 +424,11 @@
         React.createElement("div", null, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-12"}, 
-              this.state.activeCell ? 
+              this.state.activeCell !== undefined ? 
               React.createElement(CurrentClue, {direction: this.state.direction, 
-                           clue: this.getClue(this.getCurrentClueNumber(), this.state.direction)}
-                           )
-              : ""
+               clue: this.getClue(this.getCurrentClueNumber(), this.state.direction)}
+               )
+                              : React.createElement("h3", null, "Random ", this.props.size, " x ", this.props.size, " Crossword")
                            
             )
           ), 
@@ -425,6 +437,7 @@
               React.createElement(Cells, {numbered: this.props.numbered, 
                      highlightedCells: this.props.model.wordAt(this.state.activeCell, this.state.direction), 
                      highlightErrors: this.state.highlightErrors, 
+                     revealEverything: this.state.revealEverything, 
                      makeActive: this.handleMakeActive, 
                      activeCell: this.state.activeCell, 
                      direction: this.state.direction, 
@@ -434,6 +447,9 @@
                      size: this.props.size}), 
               React.createElement("label", null, 
                 React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), " Highlight Errors"
+              ), 
+              React.createElement("label", null, 
+                React.createElement("input", {type: "checkbox", onChange: this.toggleRevealEverything, checked: this.state.revealEverything}), " Reveal Answers"
               )
 
             ), 

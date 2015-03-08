@@ -95,6 +95,7 @@
 }
 .clue-container {
   list-style-type: none;
+  word-break: break-all;
 }
 .active-clue {
   background-color: gold;
@@ -136,14 +137,15 @@ label {
   font-weight: normal;
 }
 .current-clue {
+  margin-top: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 100%;
 }
 .foo {
-  width: 10%;
-  padding-top: 10%;
+  width: 5%;
+  padding-top: 5%;
   float: right;
   transition: background-color 0.5s, transform 0.5s;
 }
@@ -157,4 +159,7 @@ label {
 }
 .highlighted {
   background-color: #222;
+}
+label {
+  margin-right: 20px;
 }

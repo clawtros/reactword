@@ -1,10 +1,5 @@
 (function(React, module, undefined) {
   module.exports = React.createClass({
-    getInitialState: function() {
-      return {
-        value: this.props.value
-      };
-    },
     
     render: function() {
       var fontSize = this.props.size * 0.3,
@@ -29,7 +24,7 @@
           <div style={numStyle} className="cell-number">{this.props.number}</div>
           <div onClick={this.props.onClick}
                className="cell-content flex-centered">
-            {this.props.playable ? this.props.value : ""} 
+            {this.props.playable ? (this.props.reveal ? this.props.correctValue : this.props.value) : ""} 
           </div>
         </div>
       );

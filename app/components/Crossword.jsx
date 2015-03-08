@@ -10,6 +10,7 @@
 
     getInitialState: function() {
       return {
+        revealEverything: false,
         highlightErrors: false,
         activeCell: undefined,
         direction: DIRECTIONS.ACROSS,
@@ -30,7 +31,9 @@
           l = this.getClueNumbers(this.state.direction),
           d = delta || 1,
           index = l.indexOf(currentWordNumber) + d,
-          target = l[index < 0 ? l.length - 1 : index];
+          // TODO: remove this monstrosity
+          target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
+      console.log(index, target, index < 0 ? l.length - 1 : index, l.length);
       this.handleClueClick(target, this.state.direction);
     },
 
@@ -62,6 +65,12 @@
       });
     },
 
+    toggleRevealEverything: function() {
+      this.setState({
+        revealEverything: !this.state.revealEverything
+      });
+    },
+
     getClue: function(number, direction) {
       var clues = direction == DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down;
       return clues[number] || {};
@@ -76,11 +85,11 @@
         <div>
           <div className="row">
             <div className="col-xs-12">
-              {this.state.activeCell ? 
+              {this.state.activeCell !== undefined ? 
               <CurrentClue direction={this.state.direction}
-                           clue={this.getClue(this.getCurrentClueNumber(), this.state.direction)}
-                           />
-              : "" }
+               clue={this.getClue(this.getCurrentClueNumber(), this.state.direction)}
+               />
+                              : <h3>Random {this.props.size} x {this.props.size} Crossword</h3> }
                            
             </div>
           </div>
@@ -89,6 +98,7 @@
               <Cells numbered={this.props.numbered}
                      highlightedCells={this.props.model.wordAt(this.state.activeCell, this.state.direction)}
                      highlightErrors={this.state.highlightErrors}
+                     revealEverything={this.state.revealEverything}
                      makeActive={this.handleMakeActive}
                      activeCell={this.state.activeCell}
                      direction={this.state.direction}
@@ -98,6 +108,9 @@
                      size={this.props.size}/>
               <label>
                 <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/> Highlight Errors
+              </label>
+              <label>
+                <input type="checkbox" onChange={this.toggleRevealEverything} checked={this.state.revealEverything}/> Reveal Answers
               </label>
 
             </div>

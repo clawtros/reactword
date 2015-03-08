@@ -23,14 +23,8 @@
     handleKeyDown: function(e) {
 
       if (this.props.activeCell !== undefined) {
-        
         var values = this.state.cellValues,
             direction = this.props.direction;
-            
-        if (this.keysDown > 1) {
-          this.go(1);
-        }
-
         if (e.which == 8) {
           e.preventDefault();
           e.stopPropagation();
@@ -52,8 +46,13 @@
         }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
+          var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
           values[this.props.activeCell] = String.fromCharCode(e.which);
-          this.go(1);
+          if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
+            this.go(1);
+          } else {
+            this.props.skipWord(1);
+          }
         }
 
         if (e.which >= 37 && e.which <= 40) {
@@ -114,28 +113,27 @@
       }
     },
                                      
-    goOne: function(nextCell, delta, direction) {
+    nextCellFrom: function(cell, delta, direction) {      
+      cell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
       
-      nextCell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
-
-      if (nextCell >= this.props.values.length) {
-        nextCell -= this.props.values.length;
+      if (cell >= this.props.values.length) {
+        cell -= this.props.values.length;
       }
       
-      if (nextCell < 0) {
-        nextCell = this.props.values.length + nextCell;
+      if (cell < 0) {
+        cell = this.props.values.length + cell;
       }
       
-      return nextCell;
+      return cell;
     },
 
     go: function(delta, direction) {
       var direction = direction || this.props.direction,
-          initial = this.goOne(this.props.activeCell, delta, direction),
+          initial = this.nextCellFrom(this.props.activeCell, delta, direction),
           next = initial;
       
       while (this.props.values[next] === UNPLAYABLE) {        
-        next = this.goOne(next, delta, direction);
+        next = this.nextCellFrom(next, delta, direction);
       }
       
       this.props.makeActive(next);
@@ -170,15 +168,17 @@
       for (var k in numbers) {
         numbers[k] = count++;
       }
+      
       return (
         <div className="cell-list">
         {this.props.values.split("").map(function(cell, id) {
             return (
               <Cell onClick={this.makeActive.bind(this, id)}
                     number={numbers[id + 1]}
+                    reveal={this.props.revealEverything}
                     focused={highlightedCells.indexOf(id) > -1}
-              selected={id == this.props.activeCell}
-              highlightErrors={this.props.highlightErrors}
+                    selected={id == this.props.activeCell}
+                    highlightErrors={this.props.highlightErrors}
                     key={id}
                     value={this.state.cellValues[id]}
                     playable={cell !== UNPLAYABLE}
