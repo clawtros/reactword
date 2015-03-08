@@ -93,7 +93,7 @@
   background-color: gold;
   transform: scale(1.15);
   transition: transform 0.15s ease-out;
-  z-index: 100000;
+  z-index: 100;
 }
 .cell-list {
   border: 1px solid black;
@@ -250,12 +250,19 @@ label {
   right: 0;
 }
 @media only screen and (max-width: 48em) {
-  /* looks like z-index isn't playing nicely on the mobile with the transforms */
-  div.input-cell {
-    /*        transform: scale(1);*/
-  }
   h3.current-clue {
     white-space: initial;
-    font-size: 66%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    z-index: 10001;
+    padding: 20px;
+    margin: 0;
+    top: 0;
+    width: 100%;
+    left: 0;
+  }
+  div.cell-list {
+    padding-top: 120px;
   }
 }

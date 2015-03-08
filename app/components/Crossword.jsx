@@ -122,13 +122,13 @@
                      values={this.props.cells}
                      size={this.props.size}/>
               <label>
-                <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/> Highlight Errors
+                <input type="checkbox" onChange={this.toggleHighlightErrors} checked={this.state.highlightErrors}/> Show Errors
               </label>
               <label>
                 <input type="checkbox" onChange={this.toggleRevealEverything} checked={this.state.revealEverything}/> Reveal Answers
               </label>
               <label>
-                <input type="checkbox" onChange={this.toggleKeyboard} checked={this.state.showKeyboard}/> Show Onscreen Keyboard
+                <input type="checkbox" onChange={this.toggleKeyboard} checked={this.state.showKeyboard}/> Show Keyboard
               </label>
             </div>
             <div className="col-lg-4">

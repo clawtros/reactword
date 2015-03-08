@@ -121,12 +121,14 @@
     handleLetter: function(character) {
       var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
       this.state.cellValues[this.props.activeCell] = character;
-      if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
-        this.go(1);
-      } else {
-        this.props.skipWord(1);
-      }
 
+      //TODO: figure out some good next word logic here.  this gets a bit weird
+//      if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
+//        this.go(1);
+//      } else {
+//        this.props.skipWord(1);
+//      }
+      this.go(1);
     },
 
     handleBackspace: function() {
@@ -476,13 +478,13 @@
                      values: this.props.cells, 
                      size: this.props.size}), 
               React.createElement("label", null, 
-                React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), " Highlight Errors"
+                React.createElement("input", {type: "checkbox", onChange: this.toggleHighlightErrors, checked: this.state.highlightErrors}), " Show Errors"
               ), 
               React.createElement("label", null, 
                 React.createElement("input", {type: "checkbox", onChange: this.toggleRevealEverything, checked: this.state.revealEverything}), " Reveal Answers"
               ), 
               React.createElement("label", null, 
-                React.createElement("input", {type: "checkbox", onChange: this.toggleKeyboard, checked: this.state.showKeyboard}), " Show Onscreen Keyboard"
+                React.createElement("input", {type: "checkbox", onChange: this.toggleKeyboard, checked: this.state.showKeyboard}), " Show Keyboard"
               )
             ), 
             React.createElement("div", {className: "col-lg-4"}, 

@@ -23,12 +23,14 @@
     handleLetter: function(character) {
       var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
       this.state.cellValues[this.props.activeCell] = character;
-      if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
-        this.go(1);
-      } else {
-        this.props.skipWord(1);
-      }
 
+      //TODO: figure out some good next word logic here.  this gets a bit weird
+//      if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
+//        this.go(1);
+//      } else {
+//        this.props.skipWord(1);
+//      }
+      this.go(1);
     },
 
     handleBackspace: function() {
