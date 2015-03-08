@@ -181,9 +181,16 @@
       for (var k in numbers) {
         numbers[k] = count++;
       }
+
+      // TODO: Keyboard needs a better interface, obvs
       return (
         <div>
-          <Keyboard show={this.props.showKeyboard} directionHandler={this.toggleDirection} closeHandler={this.closeKeyboard} backspaceHandler={this.handleBackspace} keyHandler={this.handleLetter}/>
+          <Keyboard show={this.props.showKeyboard}
+                    nextHandler={this.props.skipWord}
+                    directionHandler={this.toggleDirection}
+                    closeHandler={this.closeKeyboard}
+                    backspaceHandler={this.handleBackspace}
+                    keyHandler={this.handleLetter}/>
           <div className="cell-list">
             {this.props.values.split("").map(function(cell, id) {
               return (
