@@ -285,6 +285,9 @@ label {
     z-index: 10001;
     color: white;
   }
+  div.cell {
+    transition: initial;
+  }
   div.cell-list {
     margin-top: 80px;
   }
