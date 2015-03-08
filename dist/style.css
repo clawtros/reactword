@@ -1,3 +1,42 @@
+.keyboard.onscreen {
+  transform: translateY(0%);
+  opacity: 1;
+}
+.keyboard {
+  opacity: 0;
+  transform: translateY(100%);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.keyboard-key {
+  text-transform: uppercase;
+  font-size: 4vw;
+  color: white;
+  display: inline-block;
+  margin: 0.5vw;
+  padding: 0.5vw 2vw;
+  border: 1px solid white;
+}
+.keyboard-contents {
+  position: relative;
+}
+.keyboard-close {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.keyboard-backspace {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .clearfix {
   clear: both;
   display: block;
@@ -109,7 +148,6 @@ div.container {
   padding: 5px;
 }
 .small-vertical-space {
-  display: block;
   height: 10px;
 }
 .clue-list-header {
@@ -162,4 +200,42 @@ label {
 }
 label {
   margin-right: 20px;
+}
+.keyboard.onscreen {
+  transform: translateY(0%);
+  opacity: 1;
+}
+.keyboard {
+  opacity: 0;
+  transform: translateY(100%);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.keyboard-key {
+  text-transform: uppercase;
+  font-size: 4vw;
+  color: white;
+  display: inline-block;
+  margin: 0.5vw;
+  padding: 0.5vw 2vw;
+  border: 1px solid white;
+}
+.keyboard-contents {
+  position: relative;
+}
+.keyboard-close {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.keyboard-backspace {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

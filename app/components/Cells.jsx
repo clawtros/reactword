@@ -1,6 +1,7 @@
 (function(React, module, undefined) {
-
-  var Cell = require('./Cell.jsx'),
+  // TODO: Rename this to Grid or somesuch
+  var Keyboard = require('./Keyboard.jsx'),
+      Cell = require('./Cell.jsx'),
       cw = require('../models/Crossword.js'),
       UNPLAYABLE = "#",
       DIRECTIONS = require('../models/Directions.js');
@@ -9,7 +10,6 @@
     getInitialState: function() {
       return {
         direction: DIRECTIONS.ACROSS,
-        keyIsDown: false,
         cellValues: []
       }
     },
@@ -19,24 +19,38 @@
         this.props.makeActive(id);
       }
     },
+
+    handleLetter: function(character) {
+      var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
+      this.state.cellValues[this.props.activeCell] = character;
+      if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
+        this.go(1);
+      } else {
+        this.props.skipWord(1);
+      }
+
+    },
+
+    handleBackspace: function() {
+      if (this.state.cellValues[this.props.activeCell] == undefined) {
+        this.go(-1);
+        this.state.cellValues[this.props.activeCell] = undefined;
+      } else {
+        this.state.cellValues[this.props.activeCell] = undefined;
+        this.go(-1);
+      }
+
+    },
     
     handleKeyDown: function(e) {
-
       if (this.props.activeCell !== undefined) {
         var values = this.state.cellValues,
             direction = this.props.direction;
+        
         if (e.which == 8) {
           e.preventDefault();
           e.stopPropagation();
-          
-          if (values[this.props.activeCell] == undefined) {
-            this.go(-1);
-            values[this.props.activeCell] = undefined;
-          } else {
-            values[this.props.activeCell] = undefined;
-            this.go(-1);
-          }
-
+          this.handleBackspace();
         }
 
         if (e.which == 9) {
@@ -46,13 +60,7 @@
         }
         
         if (e.which >= 65 && e.which <= 90 && !e.metaKey && !e.ctrlKey) {
-          var nextCell = this.nextCellFrom(this.props.activeCell, 1, this.props.direction);
-          values[this.props.activeCell] = String.fromCharCode(e.which);
-          if ((this.props.values[nextCell] !== UNPLAYABLE) && Math.abs(this.props.activeCell - nextCell) <= this.props.size) {
-            this.go(1);
-          } else {
-            this.props.skipWord(1);
-          }
+          this.handleLetter(String.fromCharCode(e.which));
         }
 
         if (e.which >= 37 && e.which <= 40) {
@@ -108,25 +116,25 @@
         this.setState({
           direction: direction,
           cellValues: values
-        });
-        
+        });        
       }
     },
                                      
     nextCellFrom: function(cell, delta, direction) {      
-      cell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;
-      
+      cell += (direction == DIRECTIONS.ACROSS ? 1 : this.props.size) * delta;      
       if (cell >= this.props.values.length) {
         cell -= this.props.values.length;
-      }
-      
+      }      
       if (cell < 0) {
         cell = this.props.values.length + cell;
-      }
-      
+      }      
       return cell;
     },
 
+    closeKeyboard: function() {
+      this.props.closeKeyboard();
+    },
+    
     go: function(delta, direction) {
       var direction = direction || this.props.direction,
           initial = this.nextCellFrom(this.props.activeCell, delta, direction),
@@ -168,25 +176,27 @@
       for (var k in numbers) {
         numbers[k] = count++;
       }
-      
       return (
-        <div className="cell-list">
-        {this.props.values.split("").map(function(cell, id) {
-            return (
-              <Cell onClick={this.makeActive.bind(this, id)}
-                    number={numbers[id + 1]}
-                    reveal={this.props.revealEverything}
-                    focused={highlightedCells.indexOf(id) > -1}
-                    selected={id == this.props.activeCell}
-                    highlightErrors={this.props.highlightErrors}
-                    key={id}
-                    value={this.state.cellValues[id]}
-                    playable={cell !== UNPLAYABLE}
-                    correctValue={cell}
-                    size={100 / size} />);
-           }, this)}
-
-          <div className="clearfix"></div>
+        <div>
+          <Keyboard show={this.props.showKeyboard} closeHandler={this.closeKeyboard} backspaceHandler={this.handleBackspace} keyHandler={this.handleLetter}/>
+          <div className="cell-list">
+            {this.props.values.split("").map(function(cell, id) {
+              return (
+                <Cell onClick={this.makeActive.bind(this, id)}
+                number={numbers[id + 1]}
+                reveal={this.props.revealEverything}
+                focused={highlightedCells.indexOf(id) > -1}
+                selected={id == this.props.activeCell}
+                highlightErrors={this.props.highlightErrors}
+                key={id}
+                value={this.state.cellValues[id]}
+                playable={cell !== UNPLAYABLE}
+                correctValue={cell}
+                size={100 / size} />);
+             }, this)}
+                
+                <div className="clearfix"></div>
+          </div>
         </div>
       );
     }

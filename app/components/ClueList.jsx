@@ -7,9 +7,11 @@
     componentDidUpdate: function() {
       var node = this.getDOMNode(),
           container = $(node).find('.clue-list-container'),
-          activeClue = container.find('.active-clue'),
-          newTop = activeClue.offset().top - container.offset().top - container.height() / 2 + activeClue.height() / 2;
-      container.scrollTop(container.scrollTop() + newTop);
+          activeClue = container.find('.active-clue');
+      if (activeClue.length > 0) {
+        var newTop = activeClue.offset().top - container.offset().top - container.height() / 2 + activeClue.height() / 2;
+        container.scrollTop(container.scrollTop() + newTop);
+      }
     },
     
     render: function () {
