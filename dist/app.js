@@ -63,16 +63,15 @@
 },{"./components/Crossword.jsx":5,"./data.js":8,"./models/CrosswordModel.js":10}],2:[function(require,module,exports){
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
-    
     render: function() {
-      var fontSize = this.props.size * 0.3,
+      var fontSize = this.props.size * 0.4,
           style = {
             width: this.props.size + "%",
             fontSize: fontSize + 'vw',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
-            fontSize: this.props.size + 'pt'
+            fontSize: this.props.size * 0.7 + 'pt'
           },
           classes = React.addons.classSet({
             'cell': true,
@@ -279,9 +278,16 @@
       for (var k in numbers) {
         numbers[k] = count++;
       }
+
+      // TODO: Keyboard needs a better interface, obvs
       return (
         React.createElement("div", null, 
-          React.createElement(Keyboard, {show: this.props.showKeyboard, directionHandler: this.toggleDirection, closeHandler: this.closeKeyboard, backspaceHandler: this.handleBackspace, keyHandler: this.handleLetter}), 
+          React.createElement(Keyboard, {show: this.props.showKeyboard, 
+                    nextHandler: this.props.skipWord, 
+                    directionHandler: this.toggleDirection, 
+                    closeHandler: this.closeKeyboard, 
+                    backspaceHandler: this.handleBackspace, 
+                    keyHandler: this.handleLetter}), 
           React.createElement("div", {className: "cell-list"}, 
             this.props.values.split("").map(function(cell, id) {
               return (
@@ -375,7 +381,12 @@
     },
 
     getWordNumber: function(cell, direction) {
-      return this.props.rawData.numbered[Math.min.apply(this, this.props.model.wordAt(cell, direction)) + 1]
+      // get the minimum cell from the word
+      return this.props.rawData.numbered[
+        Math.min.apply(
+          this,
+          this.props.model.wordAt(cell, direction)
+        ) + 1]
     },
 
     getClueNumbers: function(direction) {
@@ -390,6 +401,7 @@
           index = l.indexOf(currentWordNumber) + d,
           // TODO: remove this monstrosity
           target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
+      console.log(index, target, this.state.activeCell, this.state.direction);
       this.handleClueClick(target, this.state.direction);
     },
 
@@ -428,18 +440,25 @@
     },
 
     toggleKeyboard: function() {
+      if (this.state.activeCell === undefined) {
+        this.handleSkipWord();
+      }
       this.setState({
         showKeyboard: !this.state.showKeyboard
       });
     },
 
     getClue: function(number, direction) {
-      var clues = direction == DIRECTIONS.ACROSS ? this.props.rawData.clues.Across : this.props.rawData.clues.Down;
+      var clues = direction == DIRECTIONS.ACROSS ?
+                               this.props.rawData.clues.Across :
+                               this.props.rawData.clues.Down;
       return clues[number] || {};
     },
 
     getCurrentClueNumber: function() {
-      return this.state.direction == DIRECTIONS.ACROSS ? this.state.activeAcrossClue : this.state.activeDownClue;
+      return this.state.direction == DIRECTIONS.ACROSS ?
+                                     this.state.activeAcrossClue :
+                                     this.state.activeDownClue;
     },
 
     closeKeyboard: function() {
@@ -462,7 +481,7 @@
             )
           ), 
           React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "col-lg-8"}, 
+            React.createElement("div", {className: "col-md-8"}, 
               React.createElement(Cells, {numbered: this.props.numbered, 
                      highlightedCells: this.props.model.wordAt(this.state.activeCell, this.state.direction), 
                      highlightErrors: this.state.highlightErrors, 
@@ -474,7 +493,6 @@
                      showKeyboard: this.state.showKeyboard, 
                      closeKeyboard: this.closeKeyboard, 
                      toggleDirection: this.toggleDirection, 
-        
                      values: this.props.cells, 
                      size: this.props.size}), 
               React.createElement("label", null, 
@@ -483,27 +501,27 @@
               React.createElement("label", null, 
                 React.createElement("input", {type: "checkbox", onChange: this.toggleRevealEverything, checked: this.state.revealEverything}), " Reveal Answers"
               ), 
-              React.createElement("label", null, 
+              React.createElement("label", {className: "keyboard-label"}, 
                 React.createElement("input", {type: "checkbox", onChange: this.toggleKeyboard, checked: this.state.showKeyboard}), " Show Keyboard"
               )
             ), 
-            React.createElement("div", {className: "col-lg-4"}, 
+            React.createElement("div", {className: "col-md-4"}, 
               React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col-xs-6 col-lg-12"}, 
+                React.createElement("div", {className: "col-xs-6 col-md-12"}, 
                   React.createElement(ClueList, {direction: "Across", 
                             directionEnum: DIRECTIONS.ACROSS, 
                             activeClue: this.state.activeAcrossClue, 
                             clues: this.props.clues.Across, 
                             handleClueClick: this.handleClueClick})
                 ), 
-                React.createElement("div", {className: "col-xs-6 col-lg-12"}, 
+                React.createElement("div", {className: "col-xs-6 col-md-12"}, 
                   React.createElement(ClueList, {direction: "Down", 
                             directionEnum: DIRECTIONS.DOWN, 
                             activeClue: this.state.activeDownClue, 
                             clues: this.props.clues.Down, 
                             handleClueClick: this.handleClueClick})
                 )
-              ), "react" 
+              )
             )
           )
         )
@@ -554,6 +572,7 @@
         }, this), 
         React.createElement("div", {className: "keyboard-key keyboard-backspace", onClick: this.props.backspaceHandler}, "←"), 
         React.createElement("div", {className: "keyboard-key keyboard-close", onClick: this.props.closeHandler}, "CLOSE"), 
+        React.createElement("div", {className: "keyboard-key keyboard-next", onClick: this.props.nextHandler.bind(null, 1)}, "→"), 
         React.createElement("div", {className: "keyboard-key keyboard-direction", onClick: this.props.directionHandler}, "A/D")
         )
         )
