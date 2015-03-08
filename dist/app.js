@@ -162,6 +162,9 @@
         }
 
         if (e.which >= 37 && e.which <= 40) {
+          e.preventDefault();
+          e.stopPropagation();
+
           if (e.shiftKey) {
             switch (e.which) {
               case 37:
@@ -385,7 +388,6 @@
           index = l.indexOf(currentWordNumber) + d,
           // TODO: remove this monstrosity
           target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
-      console.log(index, target, index < 0 ? l.length - 1 : index, l.length);
       this.handleClueClick(target, this.state.direction);
     },
 

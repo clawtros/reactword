@@ -34,7 +34,6 @@
           index = l.indexOf(currentWordNumber) + d,
           // TODO: remove this monstrosity
           target = l[index < 0 ? l.length - 1 : (index >= l.length ? l.length - index : index)];
-      console.log(index, target, index < 0 ? l.length - 1 : index, l.length);
       this.handleClueClick(target, this.state.direction);
     },
 
