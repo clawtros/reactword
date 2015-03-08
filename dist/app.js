@@ -276,7 +276,7 @@
       }
       return (
         React.createElement("div", null, 
-          React.createElement(Keyboard, {show: this.props.showKeyboard, closeHandler: this.closeKeyboard, backspaceHandler: this.handleBackspace, keyHandler: this.handleLetter}), 
+          React.createElement(Keyboard, {show: this.props.showKeyboard, directionHandler: this.toggleDirection, closeHandler: this.closeKeyboard, backspaceHandler: this.handleBackspace, keyHandler: this.handleLetter}), 
           React.createElement("div", {className: "cell-list"}, 
             this.props.values.split("").map(function(cell, id) {
               return (
@@ -467,8 +467,8 @@
                      activeCell: this.state.activeCell, 
                      direction: this.state.direction, 
                      skipWord: this.handleSkipWord, 
-        showKeyboard: this.state.showKeyboard, 
-        closeKeyboard: this.closeKeyboard, 
+                     showKeyboard: this.state.showKeyboard, 
+                     closeKeyboard: this.closeKeyboard, 
                      toggleDirection: this.toggleDirection, 
         
                      values: this.props.cells, 
@@ -549,7 +549,8 @@
               )
         }, this), 
         React.createElement("div", {className: "keyboard-key keyboard-backspace", onClick: this.props.backspaceHandler}, "←"), 
-        React.createElement("div", {className: "keyboard-key keyboard-close", onClick: this.props.closeHandler}, "CLOSE")
+        React.createElement("div", {className: "keyboard-key keyboard-close", onClick: this.props.closeHandler}, "CLOSE"), 
+        React.createElement("div", {className: "keyboard-key keyboard-direction", onClick: this.props.directionHandler}, "A/D")
         )
         )
       )

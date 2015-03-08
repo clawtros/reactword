@@ -62,6 +62,8 @@
     z-index: 100000;
 }
 
+                                        
+
 .cell-list {
     border: 1px solid black;
 }
@@ -176,6 +178,8 @@ label {
     max-width: 100%;
 }
 
+
+
 .foo {
     width: 5%;
     padding-top: 5%;
@@ -201,4 +205,18 @@ label {
     margin-right: 20px;
 }
 
+
+
 @import "keyboard";
+
+@media only screen and (max-width:60em) {
+    /* looks like z-index isn't playing nicely on the mobile with the transforms */
+    div.input-cell {
+/*        transform: scale(1);*/
+    }
+
+    div.current-clue {
+        white-space: initial;
+        
+    }
+}

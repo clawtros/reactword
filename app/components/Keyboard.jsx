@@ -27,6 +27,7 @@
         }, this)}
         <div className={"keyboard-key keyboard-backspace"} onClick={this.props.backspaceHandler}>&larr;</div>
         <div className={"keyboard-key keyboard-close"} onClick={this.props.closeHandler}>CLOSE</div>
+        <div className={"keyboard-key keyboard-direction"} onClick={this.props.directionHandler}>A/D</div>
         </div>
         </div>
       )

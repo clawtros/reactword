@@ -178,7 +178,7 @@
       }
       return (
         <div>
-          <Keyboard show={this.props.showKeyboard} closeHandler={this.closeKeyboard} backspaceHandler={this.handleBackspace} keyHandler={this.handleLetter}/>
+          <Keyboard show={this.props.showKeyboard} directionHandler={this.toggleDirection} closeHandler={this.closeKeyboard} backspaceHandler={this.handleBackspace} keyHandler={this.handleLetter}/>
           <div className="cell-list">
             {this.props.values.split("").map(function(cell, id) {
               return (

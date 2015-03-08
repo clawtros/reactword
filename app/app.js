@@ -5,7 +5,7 @@
       CrosswordModel = require('./models/CrosswordModel.js'),
       numloadingcells = 400,
       data = require('./data.js'),
-      getRemotely = true,
+      getRemotely = false,
       testLoading = true,
       makeLoader = function() {
           var container = $('#loading_container'),

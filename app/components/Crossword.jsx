@@ -116,8 +116,8 @@
                      activeCell={this.state.activeCell}
                      direction={this.state.direction}
                      skipWord={this.handleSkipWord}
-        showKeyboard={this.state.showKeyboard}
-        closeKeyboard={this.closeKeyboard}
+                     showKeyboard={this.state.showKeyboard}
+                     closeKeyboard={this.closeKeyboard}
                      toggleDirection={this.toggleDirection}
         
                      values={this.props.cells}
