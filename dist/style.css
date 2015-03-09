@@ -16,6 +16,7 @@
   transition: transform 0.25s, opacity 0.25s;
 }
 .keyboard-key {
+  cursor: pointer;
   text-transform: uppercase;
   font-size: 4vw;
   color: white;
@@ -230,6 +231,7 @@ label {
   transition: transform 0.25s, opacity 0.25s;
 }
 .keyboard-key {
+  cursor: pointer;
   text-transform: uppercase;
   font-size: 4vw;
   color: white;
