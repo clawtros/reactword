@@ -64,7 +64,7 @@
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     render: function() {
-      var fontSize = this.props.size * 0.4,
+      var fontSize = this.props.size * 0.35,
           style = {
             width: this.props.size + "%",
             fontSize: fontSize + 'vw',
