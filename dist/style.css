@@ -103,7 +103,9 @@
 .input-cell {
   background-color: gold;
   transform: scale(1.15);
+  -webkit-transform: scale(1.15);
   transition: transform 0.15s ease-out;
+  -webkit-transition: transform 0.15s ease-out;
   z-index: 100;
 }
 .cell-list {
@@ -150,7 +152,8 @@
 }
 .clue-container {
   list-style-type: none;
-  word-break: break-all;
+  word-break: break-word;
+  padding: 4px 10px;
 }
 .active-clue {
   background-color: gold;
@@ -167,7 +170,10 @@ div.container {
   height: 10px;
 }
 .clue-list-header {
-  margin: 0 0 5px 0;
+  margin: 0;
+  padding: 10px;
+  background-color: #333;
+  color: white;
 }
 label {
   cursor: pointer;
@@ -196,6 +202,10 @@ label {
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 100%;
+}
+.current-clue:hover {
+  overflow: visible;
+  white-space: normal;
 }
 .foo {
   width: 10%;
