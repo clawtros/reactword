@@ -87,6 +87,11 @@ gulp.task('bower', function() {
 /**
  * Compiling resources and serving application
  */
+    .task('watch', ['bower', 'clean', 'lint', 'less', 'js',], function() {
+        return gulp.watch([
+            package.paths.js, package.paths.jsx, package.paths.html, package.paths.less
+        ]);
+    })
     .task('serve', ['bower', 'clean', 'lint', 'less', 'js', 'server'], function() {
         return gulp.watch([
             package.paths.js, package.paths.jsx, package.paths.html, package.paths.less

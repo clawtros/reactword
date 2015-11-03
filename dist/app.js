@@ -39,7 +39,7 @@
       document.onready = function() {
           var interval = makeLoader();
           $.ajax({
-              url: "http://localhost:5000/",
+              url: "http://crossword.clawtros.com:5000/",
               datatype: "json",
               success: function(result) {
                   var data = JSON.parse(result);

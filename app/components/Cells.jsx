@@ -2,7 +2,6 @@
   // TODO: Rename this to Grid or somesuch
   var Keyboard = require('./Keyboard.jsx'),
       Cell = require('./Cell.jsx'),
-      cw = require('../models/Crossword.js'),
       UNPLAYABLE = "#",
       DIRECTIONS = require('../models/Directions.js');
 

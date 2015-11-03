@@ -18,7 +18,6 @@
               var targetIndex = parseInt(Math.random() * numloadingcells / 2),
                   target = $($('.foo')[targetIndex]),
                   oppositeTarget = $($('.foo')[numloadingcells - targetIndex]);
-
               target.toggleClass('highlighted');
               oppositeTarget.toggleClass('highlighted');
           }
@@ -33,11 +32,13 @@
           $('.loading').addClass('out');
           $('#app').removeClass('out');
       };
+      
   } else {
+      
       document.onready = function() {
           var interval = makeLoader();
           $.ajax({
-              url: "http://cruciverbalizer.com/jsonrand/99",
+              url: "http://crossword.clawtros.com:5000/",
               datatype: "json",
               success: function(result) {
                   var data = JSON.parse(result);
