@@ -7,9 +7,6 @@
             fontSize: fontSize + 'vmin',
             paddingTop: this.props.size + "%"
           },
-          numStyle = {
-            fontSize: this.props.size + 'pt'
-          },
           classes = React.addons.classSet({
             'cell': true,
             'incorrect': this.props.value && this.props.highlightErrors && this.props.value.toLowerCase() != this.props.correctValue.toLowerCase(),
@@ -20,7 +17,7 @@
           });
       return (
         <div style={style} className={classes}>          
-          <div style={numStyle} className="cell-number">{this.props.number}</div>
+          <div className="cell-number">{this.props.number}</div>
           <div onClick={this.props.onClick}
                className="cell-content flex-centered">
             {this.props.playable ? (this.props.reveal ? this.props.correctValue : this.props.value) : ""} 
