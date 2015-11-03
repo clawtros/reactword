@@ -19,7 +19,6 @@
               var targetIndex = parseInt(Math.random() * numloadingcells / 2),
                   target = $($('.foo')[targetIndex]),
                   oppositeTarget = $($('.foo')[numloadingcells - targetIndex]);
-
               target.toggleClass('highlighted');
               oppositeTarget.toggleClass('highlighted');
           }
@@ -34,11 +33,13 @@
           $('.loading').addClass('out');
           $('#app').removeClass('out');
       };
+      
   } else {
+      
       document.onready = function() {
           var interval = makeLoader();
           $.ajax({
-              url: "http://cruciverbalizer.com/jsonrand/99",
+              url: "http://localhost:5000/",
               datatype: "json",
               success: function(result) {
                   var data = JSON.parse(result);
@@ -60,18 +61,18 @@
 
 }(React, _));
 
-},{"./components/Crossword.jsx":5,"./data.js":8,"./models/CrosswordModel.js":10}],2:[function(require,module,exports){
+},{"./components/Crossword.jsx":5,"./data.js":8,"./models/CrosswordModel.js":9}],2:[function(require,module,exports){
 (function(React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     render: function() {
       var fontSize = this.props.size * 0.35,
           style = {
             width: this.props.size + "%",
-            fontSize: fontSize + 'vw',
+            fontSize: fontSize + 'vmin',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
-            fontSize: this.props.size * 0.7 + 'pt'
+            fontSize: this.props.size + 'pt'
           },
           classes = React.addons.classSet({
             'cell': true,
@@ -99,7 +100,6 @@
   // TODO: Rename this to Grid or somesuch
   var Keyboard = require('./Keyboard.jsx'),
       Cell = require('./Cell.jsx'),
-      cw = require('../models/Crossword.js'),
       UNPLAYABLE = "#",
       DIRECTIONS = require('../models/Directions.js');
 
@@ -312,7 +312,7 @@
   });
 }(React, module));
 
-},{"../models/Crossword.js":9,"../models/Directions.js":11,"./Cell.jsx":2,"./Keyboard.jsx":7}],4:[function(require,module,exports){
+},{"../models/Directions.js":10,"./Cell.jsx":2,"./Keyboard.jsx":7}],4:[function(require,module,exports){
 (function (React, module, undefined) {
   module.exports = React.createClass({displayName: "exports",
     handleClick: function(clueId) {
@@ -530,7 +530,7 @@
   });
 }(React, module));
 
-},{"../models/CrosswordModel.js":10,"../models/Directions.js":11,"./Cells.jsx":3,"./ClueList.jsx":4,"./CurrentClue.jsx":6}],6:[function(require,module,exports){
+},{"../models/CrosswordModel.js":9,"../models/Directions.js":10,"./Cells.jsx":3,"./ClueList.jsx":4,"./CurrentClue.jsx":6}],6:[function(require,module,exports){
 (function(React, module) {
     var DIRECTIONS = require('../models/Directions.js');
     
@@ -542,7 +542,7 @@
         }
     });
 }(React, module));
-},{"../models/Directions.js":11}],7:[function(require,module,exports){
+},{"../models/Directions.js":10}],7:[function(require,module,exports){
 (function (React, module) {
   module.exports = React.createClass({displayName: "exports",
     rows: [
@@ -588,72 +588,6 @@
 }(module));
 
 },{}],9:[function(require,module,exports){
-/*global React, module */
-
-(function (React, module) {
-    var DIRECTIONS = require('./Directions.js');
-    
-    function range(start, stop, step){
-        if (typeof stop=='undefined'){
-            // one param defined
-            stop = start;
-            start = 0;
-        };
-        if (typeof step=='undefined'){
-            step = 1;
-        };
-        if ((step>0 && start>=stop) || (step<0 && start<=stop)){
-            return [];
-        };
-        var result = [];
-        for (var i=start; step>0 ? i < stop : i > stop; i+=step){
-            result.push(i);
-        };
-        return result;
-    };
-
-    module.exports = {
-        init: function(cells, size) {
-            this.cells = cells;
-            this.size = size;
-        },
-        
-        wordAt: function(position, direction) {
-            var cells = [], result = [], start, end;
-            if (direction == DIRECTIONS.ACROSS) {
-                start = Math.floor(position / this.size) * this.size;
-                end = start + this.size;
-                cells = range(start, end);
-            } else {
-                start = position % this.size;
-                end = this.cells.length;
-                cells = range(start, end, this.size);
-            }
-            var cellIndex = cells.indexOf(position),
-                left = [],
-                right = [],
-                i;
-            for (i = cellIndex; i < cells.length; i++) {
-                if (this.cells[cells[i]] !== '#') {
-                    right.push(cells[i]);
-                } else {
-                    break;
-                }
-            }
-            for (i = cellIndex; i >= 0; i--) {
-                if (this.cells[cells[i]] !== '#') {
-                    left.push(cells[i]);
-                } else {
-                    break;
-                }
-            }
-            return left.concat(right);
-        }
-    };
-
-}(React, module));
-
-},{"./Directions.js":11}],10:[function(require,module,exports){
 /*global React, module, require */
 
 (function (React, module) {
@@ -738,7 +672,7 @@
     module.exports = model;
 }(React, module));
 
-},{"./Directions.js":11,"./Unplayable.js":12}],11:[function(require,module,exports){
+},{"./Directions.js":10,"./Unplayable.js":11}],10:[function(require,module,exports){
 (function(module) {
     module.exports = {
         ACROSS: [1, 0],
@@ -746,7 +680,7 @@
     };
 }(module));
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(module) {
     module.exports = '#';
 }(module));

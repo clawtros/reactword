@@ -4,11 +4,11 @@
       var fontSize = this.props.size * 0.35,
           style = {
             width: this.props.size + "%",
-            fontSize: fontSize + 'vw',
+            fontSize: fontSize + 'vmin',
             paddingTop: this.props.size + "%"
           },
           numStyle = {
-            fontSize: this.props.size * 0.7 + 'pt'
+            fontSize: this.props.size + 'pt'
           },
           classes = React.addons.classSet({
             'cell': true,
